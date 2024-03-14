@@ -10,14 +10,17 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, echo = FALSE}
+#Data initialization
+
 library(tidyverse)
 
+# Read data
 data = read.csv("ObesityDataSet_raw_and_data_sinthetic.csv")
 head(data)
 names(data)
 
-#Rename some variables for clarity
-data %>% rename(Obesity_Level = NObeyesdad) %>% 
+# Rename some variables for clarity
+data <- data %>% rename(Obesity_Level = NObeyesdad) %>% 
   rename(Transportation_Use = MTRANS) %>%
   rename(Alcohol_Consump = CALC) %>%
   rename(Tech_Time = TUE) %>%
@@ -30,5 +33,12 @@ data %>% rename(Obesity_Level = NObeyesdad) %>%
   rename(Veggie_Consump = FCVC) %>%
   rename(HiCal_Food_Consump = FAVC) %>%
   rename(Family_History_w_Overweight = family_history_with_overweight) 
+
+s# Check updated names
+names(data)
+
+# Add BMI variable
+data <- data %>% 
+  mutate(BMI = Weight/(Height^2)) 
 ```
 
