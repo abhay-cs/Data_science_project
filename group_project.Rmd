@@ -41,4 +41,11 @@ names(data)
 data <- data %>% 
   mutate(BMI = Weight/(Height^2)) 
 ```
+# Introduction
 
+For the analysis of the provided "ObesityDataSet.csv", our team has chosen to delve into the realm of health and wellness, with a particular focus on the factors contributing to obesity. The dataset encompasses data from individuals, including critical details such as gender, age, height, weight, dietary habits, physical activity, and more, spanning from young adults to older individuals across various geographical locations.
+                                                                                                        The primary aim of our analysis is to explore and identify the key factors influencing obesity levels among individuals. Through meticulous data exploration, pre-processing, and analysis, we intend to uncover the relationships between lifestyle choices—such as dietary habits, physical activity, and technology use—and obesity. Our approach involves employing statistical methods and predictive modeling to analyze the dataset comprehensively.
+                  
+One of the cornerstones of our analysis is the development of a predictive model, possibly through linear regression or a classification approach, to predict an individual's obesity level based on various lifestyle and demographic factors. Moreover, we plan to devise a scoring model that quantifies each individual's risk level of obesity, facilitating a deeper understanding of the impact of lifestyle choices on health.    
+
+Our analysis also aims to test several hypotheses to explore intriguing questions, such as the impact of genetic predisposition (family history of overweight) on obesity, the influence of dietary choices (vegetable consumption, snack habits) and physical activity on maintaining a healthy weight, and the role of technology use in sedentary behavior contributing to obesity. Additionally, we are interested in investigating how these factors vary across different demographics and whether specific interventions or lifestyle modifications can significantly impact one's obesity risk.
