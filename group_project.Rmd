@@ -9,7 +9,27 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, include = FALSE, echo = FALSE}
+
+# Introduction
+
+For the analysis of the provided "ObesityDataSet.csv", our team has chosen to delve into the realm of health and wellness, with a particular focus on the factors contributing to obesity. The dataset encompasses data from individuals, including critical details such as gender, age, height, weight, dietary habits, physical activity, and more, spanning from young adults to older individuals across various geographical locations.
+                                                                                                        The primary aim of our analysis is to explore and identify the key factors influencing obesity levels among individuals. Through meticulous data exploration, pre-processing, and analysis, we intend to uncover the relationships between lifestyle choices—such as dietary habits, physical activity, and technology use—and obesity. Our approach involves employing statistical methods and predictive modeling to analyze the dataset comprehensively.
+                  
+One of the cornerstones of our analysis is the development of a predictive model, possibly through linear regression or a classification approach, to predict an individual's obesity level based on various lifestyle and demographic factors. Moreover, we plan to devise a scoring model that quantifies each individual's risk level of obesity, facilitating a deeper understanding of the impact of lifestyle choices on health.    
+
+Our analysis also aims to test several hypotheses to explore intriguing questions, such as the impact of genetic predisposition (family history of overweight) on obesity, the influence of dietary choices (vegetable consumption, snack habits) and physical activity on maintaining a healthy weight, and the role of technology use in sedentary behavior contributing to obesity. Additionally, we are interested in investigating how these factors vary across different demographics and whether specific interventions or lifestyle modifications can significantly impact one's obesity risk.
+
+# Analysis findings
+
+We first started by comparing different variables with each other. For example, we determined whether weight and height (i.e. BMI) directly relate to obesity level, if smoking affects your weight, if family history have a significant impact on weight, etc. By computing the average BMI for every obesity level followed by creating a box plot, we found that the obesity levels in this data set appeared to be obtained by calculating the BMI. The higher the BMI, the worse the obesity level. Therefore, we will assert that the BMI directly determines the obesity level and BMI will be used for tests where the categorical variable obesity level can not be used. Furthermore...
+
+A correlation matrix between all our continuous variables also showed us that 
+
+From analysing the data and variables we have, we have decided to move forward with finding out which combination of habits would lead being obese. Several summary statistics and data visualizations lead us to believe that factors such as ___ have a significant __
+
+# Data adjustments (only for reference. will not be in the final progress report)
+
+```{r}
 #Data initialization
 
 library(tidyverse)
@@ -42,20 +62,10 @@ data <- data %>%
   mutate(BMI = Weight/(Height^2)) 
 ```
 
-# Introduction
 
-For the analysis of the provided "ObesityDataSet.csv", our team has chosen to delve into the realm of health and wellness, with a particular focus on the factors contributing to obesity. The dataset encompasses data from individuals, including critical details such as gender, age, height, weight, dietary habits, physical activity, and more, spanning from young adults to older individuals across various geographical locations.
-                                                                                                        The primary aim of our analysis is to explore and identify the key factors influencing obesity levels among individuals. Through meticulous data exploration, pre-processing, and analysis, we intend to uncover the relationships between lifestyle choices—such as dietary habits, physical activity, and technology use—and obesity. Our approach involves employing statistical methods and predictive modeling to analyze the dataset comprehensively.
-                  
-One of the cornerstones of our analysis is the development of a predictive model, possibly through linear regression or a classification approach, to predict an individual's obesity level based on various lifestyle and demographic factors. Moreover, we plan to devise a scoring model that quantifies each individual's risk level of obesity, facilitating a deeper understanding of the impact of lifestyle choices on health.    
+# Data visualizations (only for reference. will not be in the final progress report)
 
-Our analysis also aims to test several hypotheses to explore intriguing questions, such as the impact of genetic predisposition (family history of overweight) on obesity, the influence of dietary choices (vegetable consumption, snack habits) and physical activity on maintaining a healthy weight, and the role of technology use in sedentary behavior contributing to obesity. Additionally, we are interested in investigating how these factors vary across different demographics and whether specific interventions or lifestyle modifications can significantly impact one's obesity risk.
-
-# Analysis findings
-
-From analysing the data and variables we have, we have decided to move forward with finding out which combination of habits would lead being obese. Several summary statistics and data visualizations lead us to believe that factors such as ___ have a significant __
-
-```{r, include = FALSE, echo = FALSE}
+```{r}
 # Box plot for BMI ~ Obesity Level
 
 # Re-organize the levels for the box plot
@@ -66,7 +76,7 @@ data$Obesity_Level <- data$Obesity_Level %>%
   factor(levels=obesity_levels)
 ```
 
-```{r, echo=FALSE}
+```{r}
 # Create the box plot
 data %>% 
   ggplot(aes(x = Obesity_Level, y = BMI, fill = Obesity_Level)) +
@@ -76,4 +86,20 @@ data %>%
        y = "BMI") +
   theme_minimal() + 
   theme(axis.text.x = element_text(size = 4))
+```
+
+```{r}
+# Selecting only numerical variables for correlation analysis
+numerical_vars <- data[, sapply(data, is.numeric)]
+
+# Calculating the correlation matrix
+correlation_matrix <- cor(numerical_vars)
+
+# Displaying the correlation matrix
+print(correlation_matrix)
+
+# If you want to visualize the correlation matrix
+library(corrplot)
+corrplot(correlation_matrix, method = "circle")
+
 ```
