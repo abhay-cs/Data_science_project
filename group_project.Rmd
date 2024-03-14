@@ -1,0 +1,16 @@
+---
+title: "group_project"
+author: "Abhay Sharma"
+date: "2024-03-13"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data = read.csv("ObesityDataSet_raw_and_data_sinthetic.csv")
+head(data)
+```
+
