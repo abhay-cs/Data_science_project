@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, echo = FALSE}
+```{r, include = FALSE, echo = FALSE}
 #Data initialization
 
 library(tidyverse)
@@ -34,13 +34,14 @@ data <- data %>% rename(Obesity_Level = NObeyesdad) %>%
   rename(HiCal_Food_Consump = FAVC) %>%
   rename(Family_History_w_Overweight = family_history_with_overweight) 
 
-s# Check updated names
+# Check updated names
 names(data)
 
 # Add BMI variable
 data <- data %>% 
   mutate(BMI = Weight/(Height^2)) 
 ```
+
 # Introduction
 
 For the analysis of the provided "ObesityDataSet.csv", our team has chosen to delve into the realm of health and wellness, with a particular focus on the factors contributing to obesity. The dataset encompasses data from individuals, including critical details such as gender, age, height, weight, dietary habits, physical activity, and more, spanning from young adults to older individuals across various geographical locations.
@@ -49,3 +50,30 @@ For the analysis of the provided "ObesityDataSet.csv", our team has chosen to de
 One of the cornerstones of our analysis is the development of a predictive model, possibly through linear regression or a classification approach, to predict an individual's obesity level based on various lifestyle and demographic factors. Moreover, we plan to devise a scoring model that quantifies each individual's risk level of obesity, facilitating a deeper understanding of the impact of lifestyle choices on health.    
 
 Our analysis also aims to test several hypotheses to explore intriguing questions, such as the impact of genetic predisposition (family history of overweight) on obesity, the influence of dietary choices (vegetable consumption, snack habits) and physical activity on maintaining a healthy weight, and the role of technology use in sedentary behavior contributing to obesity. Additionally, we are interested in investigating how these factors vary across different demographics and whether specific interventions or lifestyle modifications can significantly impact one's obesity risk.
+
+# Analysis findings
+
+From analysing the data and variables we have, we have decided to move forward with finding out which combination of habits would lead being obese. Several summary statistics and data visualizations lead us to believe that factors such as ___ have a significant __
+
+```{r, include = FALSE, echo = FALSE}
+# Box plot for BMI ~ Obesity Level
+
+# Re-organize the levels for the box plot
+obesity_levels <- c("Insufficient_Weight","Normal_Weight", 
+                    "Overweight_Level_I","Overweight_Level_II",
+                    "Obesity_Type_I","Obesity_Type_II","Obesity_Type_III")
+data$Obesity_Level <- data$Obesity_Level %>% 
+  factor(levels=obesity_levels)
+```
+
+```{r, echo=FALSE}
+# Create the box plot
+data %>% 
+  ggplot(aes(x = Obesity_Level, y = BMI, fill = Obesity_Level)) +
+  geom_boxplot() +
+  labs(title = "BMI and Obesity level",
+       x = "Obesity Level",
+       y = "BMI") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(size = 4))
+```
