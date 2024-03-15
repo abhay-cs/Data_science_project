@@ -24,6 +24,7 @@ We first started by comparing different variables with each other. For example, 
 
 A correlation matrix between all our continuous variables also showed us that BMI is directly positively correlated with weight, in addition to this, we can also see that none of the other continuous variables seems to be strongly correlated with weight which begs the question of whether obesity can be attributed to a single factor/bad-habit, or does it require multiple bad-habits/factors to occur.
 
+*Figure 1*
 ```{r, echo=FALSE, results=FALSE, warning=FALSE, message=FALSE}
 #Data initialization
 
