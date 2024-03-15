@@ -9,8 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
-# Introduction
+# Descriptive Analysis
 
 For the analysis of the provided "ObesityDataSet.csv", our team has chosen to delve into the realm of health and wellness, with a particular focus on the factors contributing to obesity. The dataset encompasses data from individuals, including critical details such as gender, age, height, weight, dietary habits, physical activity, and more, spanning from young adults to older individuals across various geographical locations.
                                                                                                         The primary aim of our analysis is to explore and identify the key factors influencing obesity levels among individuals. Through meticulous data exploration, pre-processing, and analysis, we intend to uncover the relationships between lifestyle choices—such as dietary habits, physical activity, and technology use—and obesity. Our approach involves employing statistical methods and predictive modeling to analyze the dataset comprehensively.
@@ -19,13 +18,15 @@ One of the cornerstones of our analysis is the development of a predictive model
 
 Our analysis also aims to test several hypotheses to explore intriguing questions, such as the impact of genetic predisposition (family history of overweight) on obesity, the influence of dietary choices (vegetable consumption, snack habits), and physical activity on maintaining a healthy weight, and the role of technology use in sedentary behavior contributing to obesity. Additionally, we are interested in investigating how these factors vary across different demographics and whether specific interventions or lifestyle modifications can significantly impact one's obesity risk.
 
-# Analysis findings
+# Current Progress
 
 We first started by comparing different variables with each other. For example, we determined whether weight and height (i.e. BMI) directly relate to obesity level, if smoking affects your weight, if family history has a significant impact on weight, etc. By computing the average BMI for every obesity level followed by creating a box plot, we found that the obesity levels in this data set appeared to be obtained by calculating the BMI. The higher the BMI, the worse the obesity level. Therefore, we will assert that the BMI directly determines the obesity level and BMI will be used for tests where the categorical variable obesity level can not be used. Furthermore...
 
 A correlation matrix between all our continuous variables also showed us that 
 
 From analyzing the data and variables we have, we have decided to move forward with finding out which combination of habits would lead to being obese. Several summary statistics and data visualizations lead us to believe that factors such as ___ have a significant __
+
+# Future direction
 
 # Data adjustments (only for reference. will not be in the final progress report)
 
