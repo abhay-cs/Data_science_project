@@ -22,13 +22,7 @@ Our analysis also aims to test several hypotheses to explore intriguing question
 
 We first started by comparing different variables with each other. For example, we determined whether weight and height (i.e. BMI) directly relate to obesity level, if smoking affects your weight, if family history has a significant impact on weight, etc. By computing the average BMI for every obesity level followed by creating a box plot, we found that the obesity levels in this data set appeared to be obtained by calculating the BMI. The higher the BMI, the worse the obesity level. Therefore, we will assert that the BMI directly determines the obesity level and BMI will be used for tests where the categorical variable obesity level can not be used. Furthermore...
 
-A correlation matrix between all our continuous variables also showed us that 
-
-From analyzing the data and variables we have, we have decided to move forward with finding out which combination of habits would lead to being obese. Several summary statistics and data visualizations lead us to believe that factors such as ___ have a significant __
-
-# Future direction
-
-# Data adjustments (only for reference. will not be in the final progress report)
+A correlation matrix between all our continuous variables also showed us that BMI is directly positively correlated with weight, in addition to this, we can also see that none of the other continuous variables seems to be strongly correlated with weight which begs the question of whether obesity can be attributed to a single factor/bad-habit, or does it require multiple bad-habits/factors to occur.
 
 ```{r}
 #Data initialization
@@ -56,13 +50,33 @@ data <- data %>% rename(Obesity_Level = NObeyesdad) %>%
   rename(Family_History_w_Overweight = family_history_with_overweight) 
 
 # Check updated names
-names(data)
+# names(data)
 
 # Add BMI variable
 data <- data %>% 
   mutate(BMI = Weight/(Height^2)) 
+# Selecting only numerical variables for correlation analysis
+numerical_vars <- data[, sapply(data, is.numeric)]
+
+# Calculating the correlation matrix
+correlation_matrix <- cor(numerical_vars)
+
+# Displaying the correlation matrix
+print(correlation_matrix)
+
+# If you want to visualize the correlation matrix
+library(corrplot)
+corrplot(correlation_matrix, method = "circle")
+
 ```
 
+From analyzing the data and variables we have, we have decided to move forward with finding out whether a combination of habits are required in order to become obese. we can express this in terms of a hypothesis:
+H0: obesity is the result of a single bad habit
+HA: obesity is the result of multiple bad habits working together in combination.
+
+# Future direction
+
+# Data adjustments (only for reference. will not be in the final progress report)
 
 # Data visualizations (only for reference. will not be in the final progress report)
 
