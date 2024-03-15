@@ -34,20 +34,13 @@ data = read.csv("ObesityDataSet_raw_and_data_sinthetic.csv")
 head(data)
 names(data)
 
-# Rename some variables for clarity
-data <- data %>% rename(Obesity_Level = NObeyesdad) %>% 
-  rename(Transportation_Use = MTRANS) %>%
-  rename(Alcohol_Consump = CALC) %>%
-  rename(Tech_Time = TUE) %>%
-  rename(Physical_Activ_Amt = FAF) %>%
-  rename(Monitor_Calories = SCC) %>%
-  rename(Water_Consump = CH2O) %>%
-  rename(Does_Smoke = SMOKE) %>%
-  rename(Food_bw_Meals = CAEC) %>%
-  rename(Main_Meal_Consump = NCP) %>%
-  rename(Veggie_Consump = FCVC) %>%
-  rename(HiCal_Food_Consump = FAVC) %>%
-  rename(Family_History_w_Overweight = family_history_with_overweight) 
+data <- data %>% 
+  rename(
+    Obesity_Level = NObeyesdad, Transportation_Use = MTRANS, Alcohol_Consump = CALC,
+    Tech_Time = TUE, Physical_Activ_Amt = FAF, Monitor_Calories = SCC, Water_Consump = CH2O,
+    Does_Smoke = SMOKE, Food_bw_Meals = CAEC, Main_Meal_Consump = NCP, Veggie_Consump = FCVC,
+    HiCal_Food_Consump = FAVC, Family_History_w_Overweight = family_history_with_overweight
+  )
 
 # Check updated names
 # names(data)
