@@ -1,5 +1,5 @@
 ---
-title: "DATA2010 Group Project Report"
+title: "DATA2010 Group Project - Progress Report"
 author: "Abhay Sharma, Darshil Dave, Max Kaplan, Kurt Galvez "
 date: "2024-03-15"
 output: pdf_document
@@ -11,8 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Descriptive Analysis
 
-For the analysis of the provided "ObesityDataSet.csv", our team has chosen to delve into the realm of health and wellness, with a particular focus on the factors contributing to obesity. The dataset encompasses data from individuals, including critical details such as gender, age, height, weight, dietary habits, physical activity, and more, spanning from young adults to older individuals across various geographical locations.
-                                                                                                        The primary aim of our analysis is to explore and identify the key factors influencing obesity levels among individuals. Through meticulous data exploration, pre-processing, and analysis, we intend to uncover the relationships between lifestyle choices—such as dietary habits, physical activity, and technology use—and obesity. Our approach involves employing statistical methods and predictive modeling to analyze the dataset comprehensively.
+Our team has chosen to delve into the realm of health and wellness, with a particular focus on the factors contributing to obesity. The data set encompasses data from individuals, including critical details such as gender, age, height, weight, dietary habits, physical activity, and more, spanning from young adults to older individuals from the countries of Mexico, Peru and Colombia.
+
+The primary aim of our analysis is to explore and identify the key factors influencing obesity levels among individuals. Through meticulous data exploration, pre-processing, and analysis, we intend to uncover the relationships between lifestyle choices such as dietary habits, physical activity, and technology use and obesity. Our approach involves employing statistical methods and predictive modeling to analyze the data set comprehensively.
                   
 One of the cornerstones of our analysis is the development of a predictive model, possibly through linear regression or a classification approach, to predict an individual's obesity level based on various lifestyle and demographic factors. Moreover, we plan to devise a scoring model that quantifies each individual's risk level of obesity, facilitating a deeper understanding of the impact of lifestyle choices on health.    
 
@@ -20,11 +21,13 @@ Our analysis also aims to test several hypotheses to explore intriguing question
 
 # Current Progress
 
-We first started by comparing different variables with each other. For example, we determined whether weight and height (i.e. BMI) directly relate to obesity level, if smoking affects your weight, if family history has a significant impact on weight, etc. By computing the average BMI for every obesity level followed by creating a box plot, we found that the obesity levels in this data set appeared to be obtained by calculating the BMI. The higher the BMI, the worse the obesity level. Therefore, we will assert that the BMI directly determines the obesity level and BMI will be used for tests where the categorical variable obesity level can not be used. Furthermore...
+We first started by comparing different variables with each other. For example, we determined whether weight and height (i.e. BMI) directly relate to obesity level, if smoking affects your weight, if family history has a significant impact on weight, etc. 
 
-A correlation matrix between all our continuous variables also showed us that BMI is directly positively correlated with weight, in addition to this, we can also see that none of the other continuous variables seems to be strongly correlated with weight which begs the question of whether obesity can be attributed to a single factor/bad-habit, or does it require multiple bad-habits/factors to occur.
+By computing the average BMI for every obesity level followed by creating a box plot, we found that the obesity levels in this data set appeared to be obtained by calculating the BMI. The higher the BMI, the worse the obesity level. Therefore, we will assert that the BMI directly determines the obesity level and BMI will be used for tests where the categorical variable obesity level can not be used.
 
-*Figure 1*
+Figure 1 below shows a correlation matrix between all our continuous variables. We see that the strongest positive correlation is between BMI and weight. Additionally, we can also see that none of the other continuous variables seems to be strongly correlated with weight which begs the question of whether obesity can be attributed to a single factor/bad-habit, or does it require multiple bad-habits/factors to occur.
+
+
 ```{r, echo=FALSE, results=FALSE, warning=FALSE, message=FALSE}
 #Data initialization
 
@@ -60,21 +63,27 @@ print(correlation_matrix)
 
 # If you want to visualize the correlation matrix
 library(corrplot)
+par(oma = c(5, 0, 0, 0))
 corrplot(correlation_matrix, method = "circle")
+mtext("Figure 1, Correlation Matrix", side = 1, line = 2, cex = 1.2, outer = TRUE)
 
 ```
 
-From analyzing the data and variables we have, we have decided to move forward with finding out whether a combination of habits are required in order to become obese. we can express this in terms of a hypothesis:
+From analyzing the data and variables we have, we have decided to move forward with finding out whether a combination of habits are required in order to become obese. We can express this in terms of a hypothesis:
 
-H0: obesity is the result of a single bad habit
-
-HA: obesity is the result of multiple bad habits working together in combination.
+\begin{center}
+$H_o:$ Obesity is the result of a single bad habit
+\end{center}
+\begin{center}
+$H_a:$ Obesity is the result of multiple bad habits working together in combination
+\end{center}
 
 # Future direction
 
 To prove this hypothesis, we can perform multiple tests that will give us insights into the true cause of obesity, be it one, or many variables. To start, since we already have to correlations of all numeric variables, we can perform an ANOVA test to determine significant differences in weight for the categorical variables for each individual variable.
+
 Another way to test the correlation of the categorical variables would be a chi-square test with the obesity level variable to determine any associations.
 
 We can also perform t-tests in order to test all the variables using the same test for standardization purposes. This can be done by comparing the mean weight of individuals with and without certain habits.
 
-In order to test the effect of multiple variables on an individuals weight, we can use multiple linear regression analysis using weight as the dependent variable with all the habits as independent variables to understand the combined effect of certain habits on obesity. Another test that can help identify habits that cooperate to cause obesity is factor analysis, which will uncover patterns among collectively occurring variables relating to weight
+In order to test the effect of multiple variables on an individuals weight, we can use multiple linear regression analysis using weight as the dependent variable with all the habits as independent variables to understand the combined effect of certain habits on obesity. Another test that can help identify habits that cooperate to cause obesity is factor analysis, which will uncover patterns among collectively occurring variables relating to weight.
