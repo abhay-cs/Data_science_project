@@ -46,22 +46,45 @@ summary(model)
 # Creating a Scoring System
 # ==========================
 
-# Normalizing factors and creating a weighted score for obesity risk
 data <- data %>%
   mutate(
-    Physical_Activity_Norm = scale(Physical_Activity),
-    Tech_Use_Time_Norm = scale(Tech_Use_Time),
-    Veggie_Consump_Norm = scale(Veggie_Consump),
-    Obesity_Risk_Score = (0.4 * Physical_Activity_Norm) + 
-      (-0.3 * Tech_Use_Time_Norm) + 
-      (0.3 * Veggie_Consump_Norm)
+    # Score for Physical Activity: Higher activity, lower score
+    Physical_Activity_Score = case_when(
+      Physical_Activ_Amt <= 1 ~ 3,
+      Physical_Activ_Amt > 1 & Physical_Activ_Amt <= 2 ~ 2,
+      Physical_Activ_Amt > 2 ~ 1
+    ),
+    # Score for Tech Time: More tech time, higher score
+    Tech_Time_Score = case_when(
+      Tech_Time <= 1 ~ 1,
+      Tech_Time > 1 & Tech_Time <= 2 ~ 2,
+      Tech_Time > 2 ~ 3
+    ),
+    # Score for Vegetable Consumption: More veggies, lower score
+    Veggie_Consumption_Score = case_when(
+      Veggie_Consump < 2 ~ 3,
+      Veggie_Consump >= 2 & Veggie_Consump <= 3 ~ 2,
+      Veggie_Consump > 3 ~ 1
+    ),
+    # Score for Family History with Overweight: Presence of history, higher score
+    Family_History_Score = case_when(
+      Family_History_w_Overweight == "yes" ~ 3,
+      TRUE ~ 1 # Assuming 'no' or other values indicate lower risk
+    ),
+    # Aggregate Obesity Risk Score: Adjust weights as necessary
+    Obesity_Risk_Score = (0.25 * Physical_Activity_Score) + 
+      (0.25 * Tech_Time_Score) + 
+      (0.25 * Veggie_Consumption_Score) + 
+      (0.25 * Family_History_Score)
   )
-
 # Inspecting the first few rows of the newly added Obesity Risk Score
 head(data$Obesity_Risk_Score, 5)
 
 # Conclusion: At this point, you can further analyze the Obesity_Risk_Score, 
 # compare it across different groups, or use it as a feature in predictive modeling.
+
+model2 <- lm(BMI ~ Obesity_Risk_Score, data = data)
+summary(model2)
 
 # Clustering Analysis
 # ===================
@@ -76,45 +99,3 @@ ggplot(data, aes(x = Physical_Activity_Norm, y = Tech_Use_Time_Norm, color = Clu
   geom_point() +
   theme_minimal() +
   labs(title = "Cluster Analysis on Obesity Risk Factors", x = "Physical Activity", y = "Tech Use Time")
-
-
-# Load necessary libraries for decision tree
-library(rpart)
-library(rpart.plot)
-
-# Preparing the data for the decision tree model
-# Note: Make sure your Obesity_Level variable is a factor if it's not numeric
-data$Obesity_Level <- as.factor(data$Obesity_Level)
-
-# Building the decision tree model
-# Adjust the formula to include the predictors relevant to your analysis
-decision_tree_model <- rpart(Obesity_Level ~ Physical_Activity + Tech_Use_Time + Veggie_Consump, 
-                             data = data, 
-                             method = "class")
-
-# Visualizing the decision tree
-rpart.plot(decision_tree_model, main = "Decision Tree for Predicting Obesity Level", 
-           extra = 102,  # Display splits and label leaves with class percentages
-           under = TRUE, # Place node labels under the nodes when extra > 0
-           faclen = 0)   # Do not abbreviate factor levels
-
-# Evaluating the model
-# You can split your data into training and testing sets to evaluate the model's performance
-# Here is a simple split for demonstration purposes
-
-set.seed(123) # For reproducibility
-training_indices <- sample(1:nrow(data), 0.8 * nrow(data))
-training_data <- data[training_indices, ]
-testing_data <- data[-training_indices, ]
-
-# Rebuilding the model with the training data
-decision_tree_model_train <- rpart(Obesity_Level ~ Physical_Activity + Tech_Use_Time + Veggie_Consump,
-                                   data = training_data, 
-                                   method = "class")
-
-# Making predictions on the testing set
-predictions <- predict(decision_tree_model_train, newdata = testing_data, type = "class")
-
-# Calculating accuracy
-accuracy <- mean(predictions == testing_data$Obesity_Level)
-print(paste("Accuracy of the decision tree model:", round(accuracy * 100, 2), "%"))
