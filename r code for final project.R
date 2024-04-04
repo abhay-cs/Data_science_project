@@ -90,17 +90,3 @@ ggplot(data, aes(y = Obesity_Risk_Score)) +
 
 model2 <- lm(BMI ~ Obesity_Risk_Score, data = data)
 summary(model2)
-
-# Clustering Analysis
-# ===================
-
-# Example of performing k-means clustering on a few selected variables
-set.seed(123)  # For reproducibility
-clusters <- kmeans(select(data, Physical_Activity_Norm, Tech_Use_Time_Norm, Veggie_Consump_Norm), centers = 3)
-data$Cluster <- as.factor(clusters$cluster)
-
-# Visualizing the clusters
-ggplot(data, aes(x = Physical_Activity_Norm, y = Tech_Use_Time_Norm, color = Cluster)) +
-  geom_point() +
-  theme_minimal() +
-  labs(title = "Cluster Analysis on Obesity Risk Factors", x = "Physical Activity", y = "Tech Use Time")
