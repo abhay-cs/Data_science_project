@@ -80,6 +80,11 @@ data <- data %>%
 # Inspecting the first few rows of the newly added Obesity Risk Score
 head(data$Obesity_Risk_Score, 5)
 
+
+ggplot(data, aes(y = Obesity_Risk_Score)) + 
+  geom_boxplot(fill = "green") + 
+  labs(title = "Boxplot of Obesity Risk Score")
+
 # Conclusion: At this point, you can further analyze the Obesity_Risk_Score, 
 # compare it across different groups, or use it as a feature in predictive modeling.
 
