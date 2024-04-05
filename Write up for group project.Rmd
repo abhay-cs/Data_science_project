@@ -8,8 +8,19 @@ date: "2024-03-31"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Intro
+Explain why we used BMI as scoring system
+
 ```{r}
 # Initialization of data
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+(library(readr))
+library(nnet)
+library(caret)
+library(gridExtra)
+library(Metrics)
 data = read.csv("obesity.csv")
 
 data <- data %>% 
@@ -65,8 +76,99 @@ ggplot(data, aes(x = BMI)) + geom_histogram(bins=20) + facet_grid(~HiCal_Food_Co
 
 # Methods
 
+We first made a linear regrssion model to find the significatn predictors of BMI from the relevant variables
+
+```{r}
+#clean data for linear model
+BMI_data <- select(data, -Weight, -Height, -Obesity_Level)
+set.seed(99)
+rownum <- sample(1:nrow(BMI_data), 2/3*nrow(BMI_data))
+
+train <- BMI_data[rownum,]
+test <- BMI_data[-rownum,]
+
+BMI_model <- lm(BMI ~., data = train)
+
+predict_BMI <- predict(BMI_model, newdata = test)
+
+
+summary(BMI_model)
+Metrics::rmse(test$BMI, predict_BMI)
+
+```
+Based on this we can see the most significant predictors for BMI
+
+we can also find out what predicotrs have effect on level of obesity
+
+
+```{r}
+level_data <- select(data, -Weight, -Height, -BMI)
+
+
+level_data$Gender <- as.factor(level_data$Gender)
+level_data$Family_History_w_Overweight <- as.factor(level_data$Family_History_w_Overweight)
+level_data$Obesity_Level <- as.factor(level_data$Obesity_Level)
+level_data$HiCal_Food_Consump <- as.factor(level_data$HiCal_Food_Consump)
+level_data$Veggie_Consump <- as.factor(level_data$Veggie_Consump)
+level_data$Main_Meal_Consump <- as.factor(level_data$Main_Meal_Consump)
+level_data$Food_bw_Meals <- as.factor(level_data$Food_bw_Meals)
+level_data$Does_Smoke <- as.factor(level_data$Does_Smoke)
+level_data$Water_Consump <- as.factor(level_data$Water_Consump)
+level_data$Monitor_Calories <- as.factor(level_data$Monitor_Calories)
+level_data$Physical_Activ_Amt <- as.factor(level_data$Physical_Activ_Amt)
+level_data$Tech_Time <- as.factor(level_data$Tech_Time)
+level_data$Alcohol_Consump <- as.factor(level_data$Alcohol_Consump)
+level_data$Transportation_Use <- as.factor(level_data$Transportation_Use)
+
+rownum <- sample(1:nrow(level_data), 2/3*nrow(level_data))
+
+train <- level_data[rownum,]
+test <- level_data[-rownum,]
+
+nnet_model <- multinom(Obesity_Level ~ Family_History_w_Overweight + Food_bw_Meals + HiCal_Food_Consump, data = train)
+
+# Make predictions on test data
+nnet_pred <- predict(nnet_model, newdata = test, type = "class")
+
+# Evaluate model performance
+accuracy <- mean(nnet_pred == test$Obesity_Level)
+accuracy
+
+
+```
+based on results of models we can test the impact or dependacy betweeen predictors and target variables
+using KW test for BMI and Chi square for Obesity Level
+
+```{r}
+library(infer)
+kruskal.test(BMI ~ Family_History_w_Overweight, data)
+kruskal.test(BMI ~ Veggie_Consump, data)
+kruskal.test(BMI ~ HiCal_Food_Consump, data)
+kruskal.test(BMI ~ Physical_Activ_Amt, data)
+
+
+chisq_test(level_data, formula = Obesity_Level ~ Family_History_w_Overweight)
+chisq_test(level_data, formula = Family_History_w_Overweight ~Obesity_Level )
+
+```
+
+
 # Results
 
+
+```{r}
+
+
+
+```
+
 # Conclusions
+
+
+```{r}
+
+
+
+```
 
 # References
