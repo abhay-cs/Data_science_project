@@ -8,6 +8,23 @@ date: "2024-03-31"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+# Initialization of data
+data = read.csv("obesity.csv")
+
+data <- data %>% 
+  rename(
+    Obesity_Level = NObeyesdad, Transportation_Use = MTRANS, Alcohol_Consump = CALC,
+    Tech_Time = TUE, Physical_Activ_Amt = FAF, Monitor_Calories = SCC, Water_Consump = CH2O,
+    Does_Smoke = SMOKE, Food_bw_Meals = CAEC, Main_Meal_Consump = NCP, Veggie_Consump = FCVC,
+    HiCal_Food_Consump = FAVC, Family_History_w_Overweight = family_history_with_overweight
+  )
+
+# Add BMI variable
+data <- data %>% 
+  mutate(BMI = Weight/(Height^2)) 
+```
+
 # Introduction
 
 # Methods

@@ -8,12 +8,18 @@ library(factoextra) # For visualizing clusters (optional, for enhanced cluster p
 # ==================
 
 # Load the dataset
-data <- read.csv("~/Downloads/ObesityDataSet_raw_and_data_sinthetic.csv")
+data <- read.csv("ObesityDataSet_raw_and_data_sinthetic.csv")
 
 # Preprocess the data: calculate BMI and rename variables for clarity
 data <- data %>%
   mutate(BMI = Weight / (Height^2)) %>%
-  rename(Obesity_Level = NObeyesdad, Tech_Use_Time = TUE, Physical_Activity = FAF)
+  rename(
+    Obesity_Level = NObeyesdad, Transportation_Use = MTRANS, Alcohol_Consump = CALC,
+    Tech_Time = TUE, Physical_Activ_Amt = FAF, Monitor_Calories = SCC, Water_Consump = CH2O,
+    Does_Smoke = SMOKE, Food_bw_Meals = CAEC, Main_Meal_Consump = NCP, Veggie_Consump = FCVC,
+    HiCal_Food_Consump = FAVC, Family_History_w_Overweight = family_history_with_overweight
+  )
+  
 
 # Exploratory Data Analysis (EDA)
 # ===============================
