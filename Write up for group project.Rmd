@@ -25,6 +25,42 @@ data <- data %>%
   mutate(BMI = Weight/(Height^2)) 
 ```
 
+```{r}
+# BMI vs Gender
+data %>% ggplot(aes(x=BMI, fill=Gender)) + geom_density()
+
+```
+
+``` {r}
+# BMI vs Age - Younger people tend to have the most variation in BMI
+data %>% ggplot(aes(x=Age, y=BMI)) + geom_point()
+
+# Obesity_Level vs Age
+data %>% ggplot(aes(x=Obesity_Level,y=Age)) + geom_boxplot()
+
+data %>% ggplot(aes(fill=Obesity_Level,x=Age)) + geom_density()
+```
+
+```{r}
+# BMI vs Family history
+data %>%
+  ggplot(aes(x = Family_History_w_Overweight, y = BMI, fill = Family_History_w_Overweight)) +
+  geom_boxplot()
+
+data %>% ggplot(aes(x=BMI,fill=Family_History_w_Overweight)) + geom_density()
+
+data %>% ggplot(aes(x=BMI, fill=Family_History_w_Overweight)) + geom_histogram()
+```
+
+```{r}
+# BMI vs HiCal_Food_Consump
+data %>%
+  ggplot(aes(x = HiCal_Food_Consump, y = BMI, fill = HiCal_Food_Consump)) +
+  geom_boxplot()
+
+ggplot(data, aes(x = BMI)) + geom_histogram(bins=20) + facet_grid(~HiCal_Food_Consump)
+```
+
 # Introduction
 
 # Methods
