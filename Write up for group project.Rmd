@@ -338,6 +338,7 @@ Obesity Risk Score: The aggregate score, with specific weights assigned to each 
     )
   )
 data6 <- data6 %>% select(-Physical_Activity_Score, -Tech_Time_Score, -Family_History_Score, -High_Cal_Food_Score, -Food_Between_Meals_Score, -Water_Consumption_Score,- Monitor_Calories_Score,-Transportation_Use_Score,-BMI_Score)
+
 head(data6)
 ```
 # Health Risk
@@ -388,10 +389,9 @@ data7 <- data %>%
       Water_Consump >= 2 & Water_Consump <= 3 ~ 2,
       Water_Consump > 3 ~ 1
     ),
-   Smoking_Score = case_when(
-     Does_Smoke == "never" ~ 1,
-     Does_Smoke == "occasionally" ~ 2,
-     Does_Smoke == "frequently" ~ 3
+    Smoking_Score = case_when(
+      Does_Smoke == "yes" ~ 3,
+      TRUE ~ 1
     ),
     Transportation_Use_Score = case_when(
       Transportation_Use %in% c("Walking", "Bike") ~ 1,
@@ -419,6 +419,7 @@ data7 <- data %>%
     )
   )
 data7 <- select(data7, -Physical_Activity_Score, -Tech_Time_Score,-Veggie_Consumption_Score,-Family_History_Score,-High_Cal_Food_Score,-Food_Between_Meals_Score,-Water_Consumption_Score,-Transportation_Use_Score,-Alcohol_Consumption_Score,-BMI_Score, -Smoking_Score)
+
 head(data7)
 ```
 
