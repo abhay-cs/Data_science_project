@@ -206,6 +206,58 @@ Transportation Use
 
 Tech Time
 
+From this, we created several data visualizations to further prove the significance of the mentioned predictors. Out of all the data visualizations the variables with family history with overweight, high calorie food consumption, physical activity and monitor calories gave us the most useful information.
+
+```{r, echo=FALSE}
+# Re-organize the levels for the Obesity Level
+obesity_levels <- c("Insufficient_Weight","Normal_Weight", 
+                    "Overweight_Level_I","Overweight_Level_II",
+                    "Obesity_Type_I","Obesity_Type_II","Obesity_Type_III")
+data$Obesity_Level <- data$Obesity_Level %>% 
+  factor(levels=obesity_levels)
+
+# Obesity Level vs Family History w Overweight **********
+data %>%
+  ggplot(aes(x = Family_History_w_Overweight, fill = Obesity_Level)) +
+  geom_bar(position="dodge2") + 
+  labs(title="Obesity Level vs Family History with Overweight", x="Family History with Overweight",
+       y="Count")
+```
+The obesity level vs family history with overweight bar plot shows us the significant change in the number of people with an obesity level of overweight and higher when they have a family history with overweight.
+
+```{r, echo=FALSE}
+# Obesity Level vs HiCal Food Consump ********
+data %>% 
+  ggplot(aes(x = HiCal_Food_Consump, fill=Obesity_Level)) + 
+  geom_bar(position="dodge2") +
+  labs(title="Obesity Level vs High Calorie Food Consumption", x="High Calorie Food Consumption",
+       y = "Count")
+```
+The obesity level vs high calorie food consumption shows the significant change in proportion of normal weight people and people categorized under an obesity level.
+
+```{r, echo=FALSE}
+# Obesity Level vs Physical **************
+data %>%
+  ggplot(aes(x = Physical_Activ_Amt,y=Obesity_Level,fill=Obesity_Level)) +
+  geom_violin() + 
+  labs(title="Obesity Level vs Physical Activity Amount", x="Physical Activity Amount",
+       y = "Obesity Level")
+```
+The obesity level vs physical activity amount violin plot shows us that there is a high density of people between normal weight and obesity type 2 with physical activity amounts between 0.5 and 1.5 while obesity type 3 have a high density of people with physical activity amounts between 0 and 0.5.
+
+```{r, echo=FALSE}
+# Obesity Level vs Monitor Calories **************
+# We see that there's a huge disparity in obesity level for people who monitor calories
+# However, there isnt much difference between obesity levels for people who do not monitor calories
+data %>%
+  ggplot(aes(x = Monitor_Calories, fill=Obesity_Level)) + 
+  geom_bar(position="dodge2") +
+  labs(title="Obesity Level vs Calorie Monitoring", x="Monitors Calories",
+       y = "Count")
+```
+The obesity level vs calorie monitoring bar plot shows us that there appears to be no significant difference between people who do not monitor their calories, however, the proportion of people who monitor their calories changes between obesity levels with the count of people monitoring their calories start to decrease when they have an obesity level of overweight 2 or higher.
+
+
 We also learned that while BMI itself doesn't have a significant impact on age, an individuals obesity level does.
 
 Armed with these insights, we went on to determine how much obesity level impacts age by performing a logistic regression predicting age using BMI. Before we did this, we plotted and analyzed a regression line of BMI and age at different age ranges to visualize this relationship.
@@ -291,47 +343,6 @@ We also gathered enough information to construct a health risk scoring system wh
 
 
 
-```{r}
-
-
-
-```
-
-```{r, echo = FALSE}
-# BMI vs HiCal_Food_Consump
-data %>%
-  ggplot(aes(x = HiCal_Food_Consump, y = BMI, fill = HiCal_Food_Consump)) +
-  geom_boxplot()
-
-ggplot(data, aes(x = BMI)) + geom_histogram(bins=20) + facet_grid(~HiCal_Food_Consump)
-```
-
-```{r, echo = FALSE}
-# BMI vs Gender
-data %>% ggplot(aes(x=BMI, fill=Gender)) + geom_density()
-
-```
-
-``` {r, echo = FALSE}
-# BMI vs Age - Younger people tend to have the most variation in BMI
-data %>% ggplot(aes(x=Age, y=BMI)) + geom_point()
-
-# Obesity_Level vs Age
-data %>% ggplot(aes(x=Obesity_Level,y=Age)) + geom_boxplot()
-
-data %>% ggplot(aes(fill=Obesity_Level,x=Age)) + geom_density()
-```
-
-```{r, echo = FALSE}
-# BMI vs Family history
-data %>%
-  ggplot(aes(x = Family_History_w_Overweight, y = BMI, fill = Family_History_w_Overweight)) +
-  geom_boxplot()
-
-data %>% ggplot(aes(x=BMI,fill=Family_History_w_Overweight)) + geom_density()
-
-data %>% ggplot(aes(x=BMI, fill=Family_History_w_Overweight)) + geom_histogram()
-```
 
 # Conclusions
 
