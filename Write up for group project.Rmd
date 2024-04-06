@@ -253,7 +253,7 @@ probability_over_40
 
 
 ```
-As you can see, the probability that an individual is older than 40 if their BMI is >35 is around 1% which is very low likelihood. This may suggest some form of missing data which we believe is not random as our results show that the higher in age, the lower the instances of very high BMI. In fact the maximum BMI observed decreases inversely with age. We further extrapolated this data using this information by assuming that this is caused due to health complications that we will attribute to obesity. this conclusion was uses as the basis for our health scoring system
+As you can see, the probability that an individual is older than 40 if their BMI is >35 is around 1% which is very low likelihood. This may suggest some form of missing data which we believe is not random as our results show that the higher in age, the lower the instances of very high BMI. In fact the maximum BMI observed decreases inversely with age. We further extrapolated the data using this information by assuming that this is caused due to health complications that we will attribute to obesity. this conclusion was uses as the basis for our health scoring system
 
 
 # Results
