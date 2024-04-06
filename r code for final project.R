@@ -60,13 +60,13 @@ data <- data %>%
       Physical_Activ_Amt > 1 & Physical_Activ_Amt <= 2 ~ 2,
       Physical_Activ_Amt > 2 ~ 1
     ),
-    # Score for Tech Time: More tech time, higher score
-    Tech_Time_Score = case_when(
-      Tech_Time <= 1 ~ 1,
-      Tech_Time > 1 & Tech_Time <= 2 ~ 2,
-      Tech_Time > 2 ~ 3
+    # Introducing Score for High-Calorie Food Consumption: More high-calorie food, higher score
+    High_Cal_Food_Score = case_when(
+      HiCal_Food_Consump <= 1 ~ 1,
+      HiCal_Food_Consump > 1 & HiCal_Food_Consump <= 2 ~ 2,
+      HiCal_Food_Consump > 2 ~ 3
     ),
-    # Score for Vegetable Consumption: More veggies, lower score
+    # Score for Vegetable Consumption: More veggies, lower score (Adjusting the weight slightly)
     Veggie_Consumption_Score = case_when(
       Veggie_Consump < 2 ~ 3,
       Veggie_Consump >= 2 & Veggie_Consump <= 3 ~ 2,
@@ -76,12 +76,14 @@ data <- data %>%
     Family_History_Score = case_when(
       Family_History_w_Overweight == "yes" ~ 3,
       TRUE ~ 1 # Assuming 'no' or other values indicate lower risk
-    ),
-    # Aggregate Obesity Risk Score: Adjust weights as necessary
-    Obesity_Risk_Score = (0.25 * Physical_Activity_Score) + 
-      (0.25 * Tech_Time_Score) + 
-      (0.25 * Veggie_Consumption_Score) + 
-      (0.25 * Family_History_Score)
+    )
+  ) %>%
+  # Aggregate Obesity Risk Score: Adjusted weights according to significance
+  mutate(
+    Obesity_Risk_Score = (0.3 * Physical_Activity_Score) +
+                         (0.2 * High_Cal_Food_Score) +
+                         (0.2 * Veggie_Consumption_Score) +
+                         (0.3 * Family_History_Score)
   )
 # Inspecting the first few rows of the newly added Obesity Risk Score
 head(data$Obesity_Risk_Score, 5)
