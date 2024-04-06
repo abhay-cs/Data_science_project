@@ -1,0 +1,653 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Group project - Final},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Group project - Final}
+\author{}
+\date{\vspace{-2.5em}2024-03-31}
+
+\begin{document}
+\maketitle
+
+Intro Explain why we used BMI as scoring system
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+This report investigates obesity and its related health risks using a
+dataset on individual characteristics and habits. Our primary goal was
+to identify significant factors influencing Body Mass Index (BMI) and
+use this information to construct a scoring system for obesity risk and
+overall health risk.
+
+BMI is a commonly used metric to assess weight status and potential
+obesity risk. It is calculated using an individual's weight and height.
+While BMI is a valuable tool, it has limitations. For instance, it
+doesn't account for muscle mass, which can be high in some individuals
+with healthy weight.
+
+This report acknowledges these limitations but utilizes BMI as a
+starting point for our analysis. We explore the factors impacting BMI
+and leverage this knowledge to build a multi-variable scoring system for
+both obesity risk and health risk associated with high BMI.
+
+\hypertarget{methods}{%
+\section{Methods}\label{methods}}
+
+After viewing the correlation Matrix and computing BMI as the Gold
+standard, out first step in gathering information on our data was to
+make a linear regression model in order to find the significant
+predictors of BMI from the relevant variables.
+
+Since BMI is calculated using weight/Height\^{}2 and Obesity level is
+calculated based on BMI, we first needed to clean the data to build an
+appropriate model by removing these variables.
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = BMI ~ ., data = train)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.4414  -3.9418   0.3361   3.4788  23.7055 
+## 
+## Coefficients:
+##                                         Estimate Std. Error t value Pr(>|t|)
+## (Intercept)                              3.35885    6.13000   0.548 0.583823
+## GenderMale                              -0.82875    0.33596  -2.467 0.013753
+## Age                                      0.31405    0.03353   9.368  < 2e-16
+## Family_History_w_Overweightyes           6.80735    0.44395  15.334  < 2e-16
+## HiCal_Food_Consumpyes                    2.32198    0.50496   4.598 4.65e-06
+## Veggie_Consump                           3.00114    0.30679   9.782  < 2e-16
+## Main_Meal_Consump                        0.47339    0.20460   2.314 0.020827
+## Food_bw_MealsFrequently                 -4.03993    1.05179  -3.841 0.000128
+## Food_bw_Mealsno                          1.88574    1.36437   1.382 0.167153
+## Food_bw_MealsSometimes                   3.10074    0.97915   3.167 0.001575
+## Does_Smokeyes                           -0.40957    1.05380  -0.389 0.697589
+## Water_Consump                            0.57999    0.26596   2.181 0.029369
+## Monitor_Caloriesyes                     -2.33645    0.74096  -3.153 0.001649
+## Physical_Activ_Amt                      -0.68224    0.19496  -3.499 0.000481
+## Tech_Time                               -0.63740    0.27248  -2.339 0.019463
+## Alcohol_ConsumpFrequently               -3.36754    5.90954  -0.570 0.568873
+## Alcohol_Consumpno                       -5.04959    5.84758  -0.864 0.387992
+## Alcohol_ConsumpSometimes                -2.48026    5.85110  -0.424 0.671707
+## Transportation_UseBike                  -0.84260    4.12896  -0.204 0.838328
+## Transportation_UseMotorbike              5.78189    1.86771   3.096 0.002003
+## Transportation_UsePublic_Transportation  5.39302    0.50164  10.751  < 2e-16
+## Transportation_UseWalking                2.59810    1.12729   2.305 0.021329
+##                                            
+## (Intercept)                                
+## GenderMale                              *  
+## Age                                     ***
+## Family_History_w_Overweightyes          ***
+## HiCal_Food_Consumpyes                   ***
+## Veggie_Consump                          ***
+## Main_Meal_Consump                       *  
+## Food_bw_MealsFrequently                 ***
+## Food_bw_Mealsno                            
+## Food_bw_MealsSometimes                  ** 
+## Does_Smokeyes                              
+## Water_Consump                           *  
+## Monitor_Caloriesyes                     ** 
+## Physical_Activ_Amt                      ***
+## Tech_Time                               *  
+## Alcohol_ConsumpFrequently                  
+## Alcohol_Consumpno                          
+## Alcohol_ConsumpSometimes                   
+## Transportation_UseBike                     
+## Transportation_UseMotorbike             ** 
+## Transportation_UsePublic_Transportation ***
+## Transportation_UseWalking               *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.705 on 1385 degrees of freedom
+## Multiple R-squared:  0.5017, Adjusted R-squared:  0.4941 
+## F-statistic: 66.39 on 21 and 1385 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "RMSE:"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 5.729089
+\end{verbatim}
+
+From the summary of our model, we noted that our R\^{}2 is .49 which
+means only half the variability of BMI was captured by this data. This
+is normal for a dataset of this nature which deals with predicting
+humans. This low value is also justified because our data is missing
+major predictors of obesity like calorie intake.
+
+Based on the model we were able to find the most significant predictors
+for BMI from the P-values provided
+
+We were also able to find out how accurate these predictors were in
+predicting an individuals level of obesity by performing multiple
+logistic regression using Obesity level as the target.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{accuracy}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.4758523
+\end{verbatim}
+
+The accuracy of our predictors ability to predict obesity group was
+around 45\% which is standard for data of this nature. It also means
+that we need more information than the variables provided to fully
+predict the Obesity group for an individual.
+
+Based on results of first model (regression) we tested the
+impact/dependency between the significant predictors BMI, and BMI using
+Kruskal-Wallis tests. If a predictor had a significant impact on BMI, we
+then performed a Chi-Square test to determine if this relationship was
+significant or random using the Obesity level, a health based grouping
+of BMI values. Based on these test results we were be able to determine
+the significant predictors of an individuals BMI.
+
+Also, in order to test the effects of BMI on an individuals health we
+performed a Kruskal-Wallis test to measure the effect of BMI on an
+individuals age as well as the effect of Obesity level on age.
+
+As a result of the aforementioned tests, every variable that passed the
+KW test also passed the Chi-Square test and as a result we were able to
+establish the significant predictors of obesity:
+
+Family History of Overweight
+
+Hi Calorie Food Consumption
+
+Physical Activity
+
+Food between Meals
+
+Water Consumption
+
+Monitor Calories
+
+Transportation Use
+
+Tech Time
+
+From this, we created several data visualizations to further prove the
+significance of the mentioned predictors. Out of all the data
+visualizations the variables with family history with overweight, high
+calorie food consumption, physical activity and monitor calories gave us
+the most useful information.
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+The obesity level vs family history with overweight bar plot (figure 1)
+shows us the significant change in the number of people with an obesity
+level of overweight and higher when they have a family history with
+overweight.
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+The obesity level vs high calorie food consumption (figure 2) shows the
+significant change in proportion of normal weight people and people
+categorized under an obesity level.
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-8-1.pdf}
+The obesity level vs physical activity amount violin plot (figure 3)
+shows us that there is a high density of people between normal weight
+and obesity type 2 with physical activity amounts between 0.5 and 1.5
+while obesity type 3 have a high density of people with physical
+activity amounts between 0 and 0.5.
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-9-1.pdf}
+The obesity level vs calorie monitoring bar plot (figure 4) shows us
+that there appears to be no significant difference between people who do
+not monitor their calories, however, the proportion of people who
+monitor their calories changes between obesity levels with the count of
+people monitoring their calories start to decrease when they have an
+obesity level of overweight 2 or higher.
+
+We also learned that while BMI itself doesn't have a significant impact
+on age, an individuals obesity level does.
+
+Armed with these insights, we went on to determine how much obesity
+level impacts age by performing a logistic regression predicting age
+using BMI. Before we did this, we plotted and analyzed a regression line
+of BMI and age at different age ranges to visualize this relationship.
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-10-2.pdf}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-10-3.pdf}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-10-4.pdf}
+
+Based on the plots, it was apparent that as the age of the observations
+increase, the maximum BMI observed decreases. We then extrapolated that
+younger individuals tend to have higher BMIs as physically, their bodies
+are not stable or fully developed yet. We then inferred that as one
+ages, a high BMI can lead to health complications which could be the
+reason for a decrease in observations. Based on these result we then
+performed our logistic regression.
+
+In order to avoid skewing the data, as BMI can often be misinterpreted
+for younger and developing individuals, we took a look at the effect of
+type 2 obesity (BMI \textgreater{} 35) on whether an individual is older
+than 40 years old.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data2}\OtherTok{\textless{}{-}}\NormalTok{data}
+\NormalTok{data2}\SpecialCharTok{$}\NormalTok{Age40 }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(data2}\SpecialCharTok{$}\NormalTok{Age }\SpecialCharTok{\textgreater{}} \DecValTok{40}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{data2}\SpecialCharTok{$}\NormalTok{BMI35 }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(data2}\SpecialCharTok{$}\NormalTok{BMI }\SpecialCharTok{\textgreater{}} \DecValTok{35}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+ \CommentTok{\# Fit logistic regression model}
+\NormalTok{log\_model4035 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(Age40 }\SpecialCharTok{\textasciitilde{}}\NormalTok{ BMI35, }\AttributeTok{data =}\NormalTok{ data2, }\AttributeTok{family =}\NormalTok{ binomial)}
+\FunctionTok{summary}\NormalTok{(log\_model4035)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## glm(formula = Age40 ~ BMI35, family = binomial, data = data2)
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)  -3.4795     0.1514 -22.990   <2e-16 ***
+## BMI35        -0.4224     0.3285  -1.286    0.198    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 524.20  on 2110  degrees of freedom
+## Residual deviance: 522.42  on 2109  degrees of freedom
+## AIC: 526.42
+## 
+## Number of Fisher Scoring iterations: 6
+\end{verbatim}
+
+Overall, based on these results, there was no statistically significant
+evidence to suggest that having a BMI over 35 affects the likelihood of
+an individual being younger than 40 years old, as the coefficient for
+BMI35 was not significant. However we used these results to find the
+likelihood that an individual is over 40 if their BMI is greater than 35
+
+intercept (Estimated Coefficient: -3.4795): The intercept represents the
+estimated log odds of an individual being younger than 40 years old when
+they do not have a BMI over 35. A negative coefficient suggests that
+individuals who do not have a BMI over 35 are less likely to be younger
+than 40 years old.
+
+BMI35 (Estimated Coefficient: -0.4224): The coefficient for BMI35
+represents the change in the log odds of an individual being younger
+than 40 years old when they have a BMI over 35 compared to when they do
+not have a BMI over 35. Here, however, we're interested in how it
+affects the likelihood of an individual being older than 40 years old.
+Given that the coefficient is negative, it implies that individuals with
+a BMI over 35 are less likely to be older than 40 years old.
+
+Now from this we were able to find the probability an individual is over
+40 years old if their BMI is greater than 35 (Obesity type 2)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{intercept }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{3.4795}
+\NormalTok{BMI35\_coefficient }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.4224}
+
+\CommentTok{\# BMI value indicating over 35}
+\NormalTok{BMI\_over\_35 }\OtherTok{\textless{}{-}} \DecValTok{1}
+
+\CommentTok{\# Calculate log odds}
+\NormalTok{log\_odds }\OtherTok{\textless{}{-}}\NormalTok{ intercept }\SpecialCharTok{+}\NormalTok{ BMI35\_coefficient }\SpecialCharTok{*}\NormalTok{ BMI\_over\_35}
+
+\CommentTok{\# Convert log odds to probability using logistic function}
+\NormalTok{probability\_over\_40 }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(log\_odds) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(log\_odds))}
+
+\CommentTok{\# Print the result}
+\NormalTok{probability\_over\_40}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.01980339
+\end{verbatim}
+
+As you can see, the probability that an individual is older than 40 if
+their BMI is \textgreater35 is around 1\% which is very low likelihood.
+This may suggest some form of missing data which we believe is not
+random as our results show that the higher in age, the lower the
+instances of very high BMI. In fact the maximum BMI observed decreases
+inversely with age. We further extrapolated the data using this
+information by assuming that this is caused due to health complications
+that we will attribute to obesity. this conclusion was uses as the basis
+for our health scoring system
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+Our results showed what variables are predictors of BMI and Obesity
+group, we used this info to construct a scoring system based which
+assesses obesity risk. Our result also pointed to the fact that Age is
+significantly influenced by an individuals Obesity level especially if
+they were classified as Obesity Type 2 or 3.
+
+We also gathered enough information to construct a health risk scoring
+system which is based upon the variables impact on an individuals
+ability to reach an old age.
+
+\hypertarget{scoring-systems}{%
+\subsection{Scoring Systems}\label{scoring-systems}}
+
+\hypertarget{obesity-risk-score}{%
+\section{Obesity Risk Score}\label{obesity-risk-score}}
+
+Physical Activity Score: Lower scores are assigned for higher amounts of
+physical activity, reflecting its role in reducing obesity risk. This
+emphasizes the protective effect of physical activity against obesity.
+
+Tech Time Score: Increased screen time, captured as Tech Time, is
+associated with higher scores, indicating its negative impact due to
+sedentary behavior.
+
+Vegetable Consumption Score: Higher vegetable consumption is rewarded
+with lower scores, supporting the role of a plant-rich diet in
+maintaining a healthy weight.
+
+Family History Score: A positive family history of overweight or obesity
+significantly increases the score, acknowledging the genetic and
+environmental influence on obesity risk.
+
+High-Calorie Food Score and Food Between Meals Score: High scores for
+high calorie food consumption and frequent eating between meals
+highlight their contribution to caloric excess and obesity.
+
+Water Consumption Score: Higher water consumption, indicative of
+healthier lifestyle choices, is assigned lower scores.
+
+Monitor Calories Score: Engaging in monitoring calories is seen as a
+positive behavior and thus receives a lower score, reflecting its
+importance in weight management.
+
+Transportation Use Score: Preference for active modes of transportation
+like walking or biking scores lower, aligning with the promotion of
+physical activity.
+
+BMI Score: Directly incorporates the WHO classification of BMI into the
+scoring, with higher categories of BMI receiving higher scores to
+directly account for current weight status in the obesity risk
+assessment.
+
+Obesity Risk Score: The aggregate score, with specific weights assigned
+to each factor, integrates these diverse elements into a comprehensive
+measure of obesity risk. The weights reflect the perceived impact of
+each factor on obesity risk, with significant factors like physical
+activity, family history, and BMI itself given slightly more influence
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(data6)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Gender Age Height Weight Family_History_w_Overweight HiCal_Food_Consump
+## 1 Female  21   1.62   64.0                         yes                 no
+## 2 Female  21   1.52   56.0                         yes                 no
+## 3   Male  23   1.80   77.0                         yes                 no
+## 4   Male  27   1.80   87.0                          no                 no
+## 5   Male  22   1.78   89.8                          no                 no
+## 6   Male  29   1.62   53.0                          no                yes
+##   Veggie_Consump Main_Meal_Consump Food_bw_Meals Does_Smoke Water_Consump
+## 1              2                 3     Sometimes         no             2
+## 2              3                 3     Sometimes        yes             3
+## 3              2                 3     Sometimes         no             2
+## 4              3                 3     Sometimes         no             2
+## 5              2                 1     Sometimes         no             2
+## 6              2                 3     Sometimes         no             2
+##   Monitor_Calories Physical_Activ_Amt Tech_Time Alcohol_Consump
+## 1               no                  0         1              no
+## 2              yes                  3         0       Sometimes
+## 3               no                  2         1      Frequently
+## 4               no                  2         0      Frequently
+## 5               no                  0         0       Sometimes
+## 6               no                  0         0       Sometimes
+##      Transportation_Use       Obesity_Level      BMI Obesity_Risk_Score
+## 1 Public_Transportation       Normal_Weight 24.38653               2.45
+## 2 Public_Transportation       Normal_Weight 24.23823               2.01
+## 3 Public_Transportation       Normal_Weight 23.76543               2.32
+## 4               Walking  Overweight_Level_I 26.85185               2.04
+## 5 Public_Transportation Overweight_Level_II 28.34238               2.35
+## 6            Automobile       Normal_Weight 20.19509               2.19
+\end{verbatim}
+
+\hypertarget{health-risk}{%
+\section{Health Risk}\label{health-risk}}
+
+This system is specifically designed to assess health risks associated
+with high BMI, incorporating similar variables from the obesity risk
+system but adding alcohol consumption into the mix. The rationale behind
+each variable remains consistent, with a few adjustments in weighting to
+accommodate the new variable:
+
+Alcohol Consumption is introduced as a factor with its score increasing
+with higher consumption levels due to the caloric intake and lifestyle
+impacts associated with alcohol use. The Health Risk Score similarly
+aggregates these scores, with adjustments in weights to balance the
+impact of each factor, including alcohol consumption. A higher
+cumulative score in this system also indicates a higher health risk
+related to high BMI.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(data7)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Gender Age Height Weight Family_History_w_Overweight HiCal_Food_Consump
+## 1 Female  21   1.62   64.0                         yes                 no
+## 2 Female  21   1.52   56.0                         yes                 no
+## 3   Male  23   1.80   77.0                         yes                 no
+## 4   Male  27   1.80   87.0                          no                 no
+## 5   Male  22   1.78   89.8                          no                 no
+## 6   Male  29   1.62   53.0                          no                yes
+##   Veggie_Consump Main_Meal_Consump Food_bw_Meals Does_Smoke Water_Consump
+## 1              2                 3     Sometimes         no             2
+## 2              3                 3     Sometimes        yes             3
+## 3              2                 3     Sometimes         no             2
+## 4              3                 3     Sometimes         no             2
+## 5              2                 1     Sometimes         no             2
+## 6              2                 3     Sometimes         no             2
+##   Monitor_Calories Physical_Activ_Amt Tech_Time Alcohol_Consump
+## 1               no                  0         1              no
+## 2              yes                  3         0       Sometimes
+## 3               no                  2         1      Frequently
+## 4               no                  2         0      Frequently
+## 5               no                  0         0       Sometimes
+## 6               no                  0         0       Sometimes
+##      Transportation_Use       Obesity_Level      BMI Health_Risk_Score
+## 1 Public_Transportation       Normal_Weight 24.38653              2.41
+## 2 Public_Transportation       Normal_Weight 24.23823              2.37
+## 3 Public_Transportation       Normal_Weight 23.76543              2.30
+## 4               Walking  Overweight_Level_I 26.85185              2.11
+## 5 Public_Transportation Overweight_Level_II 28.34238              2.36
+## 6            Automobile       Normal_Weight 20.19509              2.21
+\end{verbatim}
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-17-1.pdf}
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-17-2.pdf}
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-19-2.pdf}
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-19-3.pdf}
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-20-1.pdf}
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-20-2.pdf}
+
+\begin{verbatim}
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+\end{verbatim}
+
+\includegraphics{Write-up-for-group-project_files/figure-latex/unnamed-chunk-20-3.pdf}
+
+\hypertarget{conclusions}{%
+\section{Conclusions}\label{conclusions}}
+
+While we were able to construct a good scoring system to rank the
+variables effect of BMI and overall health we also understand that the
+models we used were not fully accurate and thus our scoring systems
+contain flaws
+
+First off, our BMI model was only at best 50\% accurate as predicting an
+individuals BMI involves much more variables and predictors than we had
+access to. In fact, the biggest predictor of weight, which is a key
+component in BMI, is calories consumed - burned, data we don't have
+access to.
+
+Finally, the age range in out dataset wasn't large or diverse enough to
+display the impacts of BMI and the other habits on an individuals life
+expectancy. That being said, we understand that our Health rating score
+may include some inaccuracy as well.
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Wickham, H., Çetinkaya-Rundel, M., \& Grolemund, G. (2023). R for Data
+  Science: Import, Tidy, transform, visualize, and model data. O'Reilly.
+\item
+  Non verbal tourists. UCI Machine Learning Repository. (n.d.).
+  \url{https://archive.ics.uci.edu/dataset/853/non+verbal+tourists+data}
+\item
+  R studio help()
+\end{enumerate}
+
+\end{document}
