@@ -45,7 +45,7 @@ data <- data %>%
 
 # Methods
 
-We first made a linear regrssion model to find the significatn predictors of BMI from the relevant variables
+We first made a linear regression model to find the significant predictors of BMI from the relevant variables
 
 ```{r}
 #clean data for linear model
@@ -66,12 +66,11 @@ Metrics::rmse(test$BMI, predict_BMI)
 
 ```
 
-We see our R^2 is .49 which means olf half the variability of BMI is captured by this data, this is normal for a dataset of this nature that deals with predicting humans. this is also beacuse our data is missign major predictors of obesity
+We see our R^2 is .49 which means only half the variability of BMI is captured by this data, this is normal for a dataset of this nature that deals with predicting humans. this is also because our data is missing major predictors of obesity like calorie intake
 
-Based on this we can see the most significant predictors for BMI
+Based on the model we can see the most significant predictors for BMI
 
-we can also find out what predicotrs have effect on level of obesity
-using multiple logistic regression
+We can also find out what predictors have effect on level of obesity using multiple logistic regression
 
 ```{r}
 #reclean
@@ -109,10 +108,10 @@ accuracy
 
 
 ```
-our accuracy of our predictors to predict obesity group is around 45% which is standard for data of this nature. also it means that we need more information than the variables provided to fully predict the Obesity group of an individual
+the accuracy of our predictors to predict obesity group is around 45% which is standard for data of this nature. also it means that we need more information than the variables provided to fully predict the Obesity group for an individual
 
-based on results of first model (regression) we can test the impact or dependacy betweeen predictors and target variables
-using KW test for BMI and Chi square for Obesity Level
+based on results of first model (regression) we can test the impact/dependency between predictors and target variables
+using Kruskal-Wallis test for BMI and Chi-Square for Obesity Level
 
 ```{r}
 library(infer)
@@ -148,6 +147,20 @@ chisq_test(level_data, formula = Obesity_Level ~ Tech_Time)
 ##all passed chiquare test to indicate the depenacy or relationship between them and obesity level is not random
 
 ```
+we have now established the significant predictors of obesity:
+
+Family History of Overweight
+Hi Calorie Food Consumption
+Physical Activity
+Food between Meals
+Water Consumption
+Monitor Calories
+Transportation Use
+Tech Time
+
+next we will determine how much obesity level impacts age by performing a logistic regression predicting age using BMI. to avoid skewing the data, as BMI can often be misinterpreted for younger and developing individuals, we will take a look at the effect of type 2 obesity (BMI > 35) on whether an individual is older than 40 years old
+
+
 ```{r}
 data2<-data
 data2$Age40 <- ifelse(data2$Age > 40, 1, 0)
@@ -159,12 +172,12 @@ summary(log_model4035)
 ```
 Overall, based on these results, there is no statistically significant evidence to suggest that having a BMI over 35 affects the likelihood of an individual being younger than 40 years old, as the coefficient for BMI35 is not significant. However we can use these results to find the likelihood that an individual is over 40 if their BMI is greater than 35
 
-Intercept (Estimated Coefficient: -3.4795): The intercept represents the estimated log odds of an individual being younger than 40 years old when they do not have a BMI over 35. A negative coefficient suggests that individuals who do not have a BMI over 35 are less likely to be younger than 40 years old.
+intercept (Estimated Coefficient: -3.4795): The intercept represents the estimated log odds of an individual being younger than 40 years old when they do not have a BMI over 35. A negative coefficient suggests that individuals who do not have a BMI over 35 are less likely to be younger than 40 years old.
 
 BMI35 (Estimated Coefficient: -0.4224): The coefficient for BMI35 represents the change in the log odds of an individual being younger than 40 years old when they have a BMI over 35 compared to when they do not have a BMI over 35. Here, however, we're interested in how it affects the likelihood of an individual being older than 40 years old. Given that the coefficient is negative, it implies that individuals with a BMI over 35 are less likely to be older than 40 years old.
 
 
-Now i will find the probability an individual is over 40 years old if their BMI is greater than 35 (Obesity type 2)
+Now we will find the probability an individual is over 40 years old if their BMI is greater than 35 (Obesity type 2)
 
 ```{r}
 
@@ -185,7 +198,7 @@ probability_over_40
 
 
 ```
-As you can see, the probability that an individual is older than 40 if their BMI is 35< is around 1% which is very low likelylihood.
+As you can see, the probability that an individual is older than 40 if their BMI is >35 is around 1% which is very low likelylihood. this suggests some form of missing data which we believe is not random as our results show that the higher in age, the lower the instances of very high BMI. In fact the maximum BMI observed decreases inversly with age. we exrapolate this data by assuming that this is caused due to health complications that we will attribute to obesity, and we will uses this as the basis for our health scoring system
 
 
 # Results
