@@ -334,7 +334,7 @@ Obesity Risk Score: The aggregate score, with specific weights assigned to each 
       0.09 * Water_Consumption_Score +
       0.09 * Monitor_Calories_Score +
       0.09 * Transportation_Use_Score +
-      0.15 * BMI_Score # Adjusted weight for BMI
+      0.16 * BMI_Score # Adjusted weight for BMI
     )
   )
 data6 <- data6 %>% select(-Physical_Activity_Score, -Tech_Time_Score, -Veggie_Consumption_Score, -Family_History_Score, -High_Cal_Food_Score, -Food_Between_Meals_Score, -Water_Consumption_Score,- Monitor_Calories_Score,-Transportation_Use_Score,-BMI_Score)
@@ -388,9 +388,10 @@ data7 <- data %>%
       Water_Consump >= 2 & Water_Consump <= 3 ~ 2,
       Water_Consump > 3 ~ 1
     ),
-    Monitor_Calories_Score = case_when(
-      Monitor_Calories == "yes" ~ 1,
-      TRUE ~ 3
+   Smoking_Score = case_when(
+     Does_Smoke == "never" ~ 1,
+     Does_Smoke == "occasionally" ~ 2,
+     Does_Smoke == "frequently" ~ 3
     ),
     Transportation_Use_Score = case_when(
       Transportation_Use %in% c("Walking", "Bike") ~ 1,
@@ -404,17 +405,17 @@ data7 <- data %>%
     ),
     # Aggregate Health Risk Score:
     Health_Risk_Score = (
-      0.10 * Physical_Activity_Score + 
-      0.08 * Tech_Time_Score + 
-      0.08 * Veggie_Consumption_Score + 
+      0.11 * Physical_Activity_Score + 
+      0.09 * Tech_Time_Score + 
+      0.07 * Veggie_Consumption_Score + 
       0.10 * Family_History_Score +
       0.10 * High_Cal_Food_Score +
-      0.08 * Food_Between_Meals_Score +
-      0.08 * Water_Consumption_Score +
-      0.08 * Monitor_Calories_Score +
-      0.08 * Transportation_Use_Score +
+      0.07 * Food_Between_Meals_Score +
+      0.07 * Water_Consumption_Score +
+      0.09 * Smoking_Score +
+      0.07 * Transportation_Use_Score +
       0.10 * Alcohol_Consumption_Score + # New variable
-      0.12 * BMI_Score # Keeping the BMI score with significant weight
+      0.15 * BMI_Score # Keeping the BMI score with significant weight
     )
   )
 data7 <- select(data7, -Physical_Activity_Score, -Tech_Time_Score,-Veggie_Consumption_Score,-Family_History_Score,-High_Cal_Food_Score,-Food_Between_Meals_Score,-Water_Consumption_Score,-Monitor_Calories_Score,-Transportation_Use_Score,-Alcohol_Consumption_Score,-BMI_Score)
