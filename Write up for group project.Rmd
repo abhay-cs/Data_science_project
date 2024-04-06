@@ -45,9 +45,9 @@ data <- data %>%
 
 # Methods
 
-After viewing the correlation Matrix and computing BMI as the Gold standard, out first step to gather information on our data was to make a linear regression model to find the significant predictors of BMI from the relevant variables.
+After viewing the correlation Matrix and computing BMI as the Gold standard, out first step in gathering information on our data was to make a linear regression model in order to find the significant predictors of BMI from the relevant variables.
 
-Since BMi is calculated using weight/Height^2 and Obesity level is calculated based on BMI, we first needed to clean the data to build an appropriate model by removing these variables.
+Since BMI is calculated using weight/Height^2 and Obesity level is calculated based on BMI, we first needed to clean the data to build an appropriate model by removing these variables.
 
 ```{r, echo = FALSE}
 #clean data for linear model
@@ -279,7 +279,7 @@ BMI Score: Directly incorporates the WHO classification of BMI into the scoring,
 
 Obesity Risk Score: The aggregate score, with specific weights assigned to each factor, integrates these diverse elements into a comprehensive measure of obesity risk. The weights reflect the perceived impact of each factor on obesity risk, with significant factors like physical activity, family history, and BMI itself given slightly more influence
 
-```{r}
+```{r, echo = FALSE, include = FALSE}
  data6 <- data %>%
   mutate(
     Physical_Activity_Score = case_when(
@@ -343,6 +343,7 @@ Obesity Risk Score: The aggregate score, with specific weights assigned to each 
       0.15 * BMI_Score # Adjusted weight for BMI
     )
   )
+data6 <- data6 %>% select(-Physical_Activity_Score, -Tech_Time_Score, -Veggie_Consumption_Score, -Family_History_Score, -High_Cal_Food_Score, -Food_Between_Meals_Score, -Water_Consumption_Score,- Monitor_Calories_Score,-Transportation_Use_Score,-BMI_Score)
 head(data6)
 ```
 # Health Risk
@@ -351,7 +352,7 @@ This system is specifically designed to assess health risks associated with high
 Alcohol Consumption is introduced as a factor with its score increasing with higher consumption levels due to the caloric intake and lifestyle impacts associated with alcohol use.
 The Health Risk Score similarly aggregates these scores, with adjustments in weights to balance the impact of each factor, including alcohol consumption. A higher cumulative score in this system also indicates a higher health risk related to high BMI.
 
-```{r}
+```{r, echo = FALSE, include = FALSE}
 data7 <- data %>%
   mutate(
     Alcohol_Consumption_Score = case_when(
@@ -422,6 +423,7 @@ data7 <- data %>%
       0.12 * BMI_Score # Keeping the BMI score with significant weight
     )
   )
+data7 <- select(data7, -Physical_Activity_Score, -Tech_Time_Score,-Veggie_Consumption_Score,-Family_History_Score,-High_Cal_Food_Score,-Food_Between_Meals_Score,-Water_Consumption_Score,-Monitor_Calories_Score,-Transportation_Use_Score,-Alcohol_Consumption_Score,-BMI_Score)
 head(data7)
 ```
 
