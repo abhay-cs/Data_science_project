@@ -45,11 +45,11 @@ data <- data %>%
 
 # Methods
 
-After viewing the correlation Matrix and computing BMI as the Gold standard, out first step to gather information on our data was to make a linear regression model to find the significant predictors of BMI from the relevant variables.
+After viewing the correlation Matrix and computing BMI as the Gold standard, out first step in gathering information on our data was to make a linear regression model in order to find the significant predictors of BMI from the relevant variables.
 
-Since BMi is calculated using weight/Height^2 and Obesity level is calculated based on BMI, we first needed to clean the data to build an appropriate model by removing these variables.
+Since BMI is calculated using weight/Height^2 and Obesity level is calculated based on BMI, we first needed to clean the data to build an appropriate model by removing these variables.
 
-```{r, echo = FALSE, include = FALSE}
+```{r, echo = FALSE}
 #clean data for linear model
 BMI_data <- select(data, -Weight, -Height, -Obesity_Level)
 set.seed(99)
@@ -62,45 +62,12 @@ BMI_model <- lm(BMI ~., data = train)
 
 predict_BMI <- predict(BMI_model, newdata = test)
 
-
 summary(BMI_model)
 
 print("RMSE:")
 Metrics::rmse(test$BMI, predict_BMI)
 
 ```
- t value Pr(>|t|)    
-(Intercept)                               0.548 0.583823    
-GenderMale                               -2.467 0.013753 *  
-Age                                       9.368  < 2e-16 ***
-Family_History_w_Overweightyes           15.334  < 2e-16 ***
-HiCal_Food_Consumpyes                     4.598 4.65e-06 ***
-Veggie_Consump                            9.782  < 2e-16 ***
-Main_Meal_Consump                         2.314 0.020827 *  
-Food_bw_MealsFrequently                  -3.841 0.000128 ***
-Food_bw_Mealsno                           1.382 0.167153    
-Food_bw_MealsSometimes                    3.167 0.001575 ** 
-Does_Smokeyes                            -0.389 0.697589    
-Water_Consump                             2.181 0.029369 *  
-Monitor_Caloriesyes                      -3.153 0.001649 ** 
-Physical_Activ_Amt                       -3.499 0.000481 ***
-Tech_Time                                -2.339 0.019463 *  
-Alcohol_ConsumpFrequently                -0.570 0.568873    
-Alcohol_Consumpno                        -0.864 0.387992    
-Alcohol_ConsumpSometimes                 -0.424 0.671707    
-Transportation_UseBike                   -0.204 0.838328    
-Transportation_UseMotorbike               3.096 0.002003 ** 
-Transportation_UsePublic_Transportation  10.751  < 2e-16 ***
-Transportation_UseWalking                 2.305 0.021329 *  
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Residual standard error: 5.705 on 1385 degrees of freedom
-Multiple R-squared:  0.5017,	Adjusted R-squared:  0.4941 
-F-statistic: 66.39 on 21 and 1385 DF,  p-value: < 2.2e-16
-
-[1] "RMSE:"
-[1] 5.729089
 
 
 From the summary of our model, we noted that our R^2 is .49 which means only half the variability of BMI was captured by this data. This is normal for a dataset of this nature which deals with predicting humans. This low value is also justified because our data is missing major predictors of obesity like calorie intake.
@@ -149,7 +116,7 @@ accuracy
 
 The accuracy of our predictors ability to predict obesity group was around 45% which is standard for data of this nature. It also means that we need more information than the variables provided to fully predict the Obesity group for an individual.
 
-Based on results of first model (regression) we tested the impact/dependency between the significant predictors BMI, and BMI using Kruskal-Wallis tests. If a predictor has a significant impact on BMI, we will then perform a Chi-Square test to determine if this relationship is significant or random using the Obesity level, a health based grouping of BMI values. Based on these test results we were be able to determine the significant predictors of an individuals BMI
+Based on results of first model (regression) we tested the impact/dependency between the significant predictors BMI, and BMI using Kruskal-Wallis tests. If a predictor had a significant impact on BMI, we then performed a Chi-Square test to determine if this relationship was significant or random using the Obesity level, a health based grouping of BMI values. Based on these test results we were be able to determine the significant predictors of an individuals BMI.
 
 Also, in order to test the effects of BMI on an individuals health we performed a Kruskal-Wallis test to measure the effect of BMI on an individuals age as well as the effect of Obesity level on age.
 
@@ -185,10 +152,10 @@ chisq_test(level_data, formula = Obesity_Level ~ Water_Consump)
 chisq_test(level_data, formula = Obesity_Level ~ Monitor_Calories)
 chisq_test(level_data, formula = Obesity_Level ~ Transportation_Use)
 chisq_test(level_data, formula = Obesity_Level ~ Tech_Time)
-##all passed chiquare test to indicate the depenacy or relationship between them and obesity level is not random
+##all passed chisquare test to indicate the dependacy or relationship between them and obesity level is not random
 
 ```
-As a result of the aforementioned tests, we were able to establish the significant predictors of obesity:
+As a result of the aforementioned tests, every variable that passed the KW test also passed the Chi-Square test and as a result we were able to establish the significant predictors of obesity:
 
 Family History of Overweight
 
@@ -205,58 +172,6 @@ Monitor Calories
 Transportation Use
 
 Tech Time
-
-From this, we created several data visualizations to further prove the significance of the mentioned predictors. Out of all the data visualizations the variables with family history with overweight, high calorie food consumption, physical activity and monitor calories gave us the most useful information.
-
-```{r, echo=FALSE}
-# Re-organize the levels for the Obesity Level
-obesity_levels <- c("Insufficient_Weight","Normal_Weight", 
-                    "Overweight_Level_I","Overweight_Level_II",
-                    "Obesity_Type_I","Obesity_Type_II","Obesity_Type_III")
-data$Obesity_Level <- data$Obesity_Level %>% 
-  factor(levels=obesity_levels)
-
-# Obesity Level vs Family History w Overweight **********
-data %>%
-  ggplot(aes(x = Family_History_w_Overweight, fill = Obesity_Level)) +
-  geom_bar(position="dodge2") + 
-  labs(title="Obesity Level vs Family History with Overweight", x="Family History with Overweight",
-       y="Count")
-```
-The obesity level vs family history with overweight bar plot shows us the significant change in the number of people with an obesity level of overweight and higher when they have a family history with overweight.
-
-```{r, echo=FALSE}
-# Obesity Level vs HiCal Food Consump ********
-data %>% 
-  ggplot(aes(x = HiCal_Food_Consump, fill=Obesity_Level)) + 
-  geom_bar(position="dodge2") +
-  labs(title="Obesity Level vs High Calorie Food Consumption", x="High Calorie Food Consumption",
-       y = "Count")
-```
-The obesity level vs high calorie food consumption shows the significant change in proportion of normal weight people and people categorized under an obesity level.
-
-```{r, echo=FALSE}
-# Obesity Level vs Physical **************
-data %>%
-  ggplot(aes(x = Physical_Activ_Amt,y=Obesity_Level,fill=Obesity_Level)) +
-  geom_violin() + 
-  labs(title="Obesity Level vs Physical Activity Amount", x="Physical Activity Amount",
-       y = "Obesity Level")
-```
-The obesity level vs physical activity amount violin plot shows us that there is a high density of people between normal weight and obesity type 2 with physical activity amounts between 0.5 and 1.5 while obesity type 3 have a high density of people with physical activity amounts between 0 and 0.5.
-
-```{r, echo=FALSE}
-# Obesity Level vs Monitor Calories **************
-# We see that there's a huge disparity in obesity level for people who monitor calories
-# However, there isnt much difference between obesity levels for people who do not monitor calories
-data %>%
-  ggplot(aes(x = Monitor_Calories, fill=Obesity_Level)) + 
-  geom_bar(position="dodge2") +
-  labs(title="Obesity Level vs Calorie Monitoring", x="Monitors Calories",
-       y = "Count")
-```
-The obesity level vs calorie monitoring bar plot shows us that there appears to be no significant difference between people who do not monitor their calories, however, the proportion of people who monitor their calories changes between obesity levels with the count of people monitoring their calories start to decrease when they have an obesity level of overweight 2 or higher.
-
 
 We also learned that while BMI itself doesn't have a significant impact on age, an individuals obesity level does.
 
@@ -337,16 +252,216 @@ As you can see, the probability that an individual is older than 40 if their BMI
 
 # Results
 
-Our results showed what variables are predictors of BMI and Obesity group, we used this info to construct a scoring system based which asseses obesity risk. Our result also pointed to the fact that Age is significantly influenced by an individuals Obesity level especially if they were classified as Obesity Type 2 or 3.
+Our results showed what variables are predictors of BMI and Obesity group, we used this info to construct a scoring system based which assesses obesity risk. Our result also pointed to the fact that Age is significantly influenced by an individuals Obesity level especially if they were classified as Obesity Type 2 or 3.
 
 We also gathered enough information to construct a health risk scoring system which is based upon the variables impact on an individuals ability to reach an old age.
 
+## Scoring Systems
 
+# Obesity Risk Score
+Physical Activity Score: Lower scores are assigned for higher amounts of physical activity, reflecting its role in reducing obesity risk. This emphasizes the protective effect of physical activity against obesity.
 
+Tech Time Score: Increased screen time, captured as Tech Time, is associated with higher scores, indicating its negative impact due to sedentary behavior.
+
+Vegetable Consumption Score: Higher vegetable consumption is rewarded with lower scores, supporting the role of a plant-rich diet in maintaining a healthy weight.
+
+Family History Score: A positive family history of overweight or obesity significantly increases the score, acknowledging the genetic and environmental influence on obesity risk.
+
+High-Calorie Food Score and Food Between Meals Score: High scores for high calorie food consumption and frequent eating between meals highlight their contribution to caloric excess and obesity.
+
+Water Consumption Score: Higher water consumption, indicative of healthier lifestyle choices, is assigned lower scores.
+
+Monitor Calories Score: Engaging in monitoring calories is seen as a positive behavior and thus receives a lower score, reflecting its importance in weight management.
+
+Transportation Use Score: Preference for active modes of transportation like walking or biking scores lower, aligning with the promotion of physical activity.
+
+BMI Score: Directly incorporates the WHO classification of BMI into the scoring, with higher categories of BMI receiving higher scores to directly account for current weight status in the obesity risk assessment.
+
+Obesity Risk Score: The aggregate score, with specific weights assigned to each factor, integrates these diverse elements into a comprehensive measure of obesity risk. The weights reflect the perceived impact of each factor on obesity risk, with significant factors like physical activity, family history, and BMI itself given slightly more influence
+
+```{r, echo = FALSE, include = FALSE}
+ data6 <- data %>%
+  mutate(
+    Physical_Activity_Score = case_when(
+      Physical_Activ_Amt <= 1 ~ 3,
+      Physical_Activ_Amt > 1 & Physical_Activ_Amt <= 2 ~ 2,
+      Physical_Activ_Amt > 2 ~ 1
+    ),
+    Tech_Time_Score = case_when(
+      Tech_Time <= 1 ~ 1,
+      Tech_Time > 1 & Tech_Time <= 2 ~ 2,
+      Tech_Time > 2 ~ 3
+    ),
+    Family_History_Score = case_when(
+      Family_History_w_Overweight == "yes" ~ 3,
+      TRUE ~ 1
+    ),
+    High_Cal_Food_Score = case_when(
+      HiCal_Food_Consump <= 2 ~ 1,
+      HiCal_Food_Consump > 2 ~ 3
+    ),
+    Food_Between_Meals_Score = case_when(
+      Food_bw_Meals <= 2 ~ 1,
+      Food_bw_Meals > 2 ~ 3
+    ),
+    Water_Consumption_Score = case_when(
+      Water_Consump < 2 ~ 3,
+      Water_Consump >= 2 & Water_Consump <= 3 ~ 2,
+      Water_Consump > 3 ~ 1
+    ),
+    Monitor_Calories_Score = case_when(
+      Monitor_Calories == "yes" ~ 1,
+      TRUE ~ 3
+    ),
+    Transportation_Use_Score = case_when(
+      Transportation_Use %in% c("Walking", "Bike") ~ 1,
+      TRUE ~ 3
+    ),
+    # BMI Score (WHO Classification)
+    BMI_Score = case_when(
+      BMI < 18.5 ~ 1, # Underweight
+      BMI >= 18.5 & BMI < 25 ~ 2, # Normal weight
+      BMI >= 25 & BMI < 30 ~ 3, # Overweight
+      BMI >= 30 ~ 4  # Obesity
+    ),
+    # Aggregate Obesity Risk Score: 
+    Obesity_Risk_Score = (
+      0.13 * Physical_Activity_Score + 
+      0.09 * Tech_Time_Score + 
+      0.13 * Family_History_Score +
+      0.09 * High_Cal_Food_Score +
+      0.09 * Food_Between_Meals_Score +
+      0.09 * Water_Consumption_Score +
+      0.09 * Monitor_Calories_Score +
+      0.09 * Transportation_Use_Score +
+      0.16 * BMI_Score # Adjusted weight for BMI
+    )
+  )
+data6 <- data6 %>% select(-Physical_Activity_Score, -Tech_Time_Score, -Family_History_Score, -High_Cal_Food_Score, -Food_Between_Meals_Score, -Water_Consumption_Score,- Monitor_Calories_Score,-Transportation_Use_Score,-BMI_Score)
+head(data6)
+```
+# Health Risk
+This system is specifically designed to assess health risks associated with high BMI, incorporating similar variables from the obesity risk system but adding alcohol consumption into the mix. The rationale behind each variable remains consistent, with a few adjustments in weighting to accommodate the new variable:
+
+Alcohol Consumption is introduced as a factor with its score increasing with higher consumption levels due to the caloric intake and lifestyle impacts associated with alcohol use.
+The Health Risk Score similarly aggregates these scores, with adjustments in weights to balance the impact of each factor, including alcohol consumption. A higher cumulative score in this system also indicates a higher health risk related to high BMI.
+
+```{r, echo = FALSE, include = FALSE}
+data7 <- data %>%
+  mutate(
+    Alcohol_Consumption_Score = case_when(
+      Alcohol_Consump <= 1 ~ 1, # Low consumption
+      Alcohol_Consump > 1 & Alcohol_Consump <= 2 ~ 2, # Moderate consumption
+      Alcohol_Consump > 2 ~ 3 # High consumption
+    ),
+    # Existing Scores
+    Physical_Activity_Score = case_when(
+      Physical_Activ_Amt <= 1 ~ 3,
+      Physical_Activ_Amt > 1 & Physical_Activ_Amt <= 2 ~ 2,
+      Physical_Activ_Amt > 2 ~ 1
+    ),
+    Tech_Time_Score = case_when(
+      Tech_Time <= 1 ~ 1,
+      Tech_Time > 1 & Tech_Time <= 2 ~ 2,
+      Tech_Time > 2 ~ 3
+    ),
+    Veggie_Consumption_Score = case_when(
+      Veggie_Consump < 2 ~ 3,
+      Veggie_Consump >= 2 & Veggie_Consump <= 3 ~ 2,
+      Veggie_Consump > 3 ~ 1
+    ),
+    Family_History_Score = case_when(
+      Family_History_w_Overweight == "yes" ~ 3,
+      TRUE ~ 1
+    ),
+    # New Scores
+    High_Cal_Food_Score = case_when(
+      HiCal_Food_Consump <= 2 ~ 1,
+      HiCal_Food_Consump > 2 ~ 3
+    ),
+    Food_Between_Meals_Score = case_when(
+      Food_bw_Meals <= 2 ~ 1,
+      Food_bw_Meals > 2 ~ 3
+    ),
+    Water_Consumption_Score = case_when(
+      Water_Consump < 2 ~ 3,
+      Water_Consump >= 2 & Water_Consump <= 3 ~ 2,
+      Water_Consump > 3 ~ 1
+    ),
+   Smoking_Score = case_when(
+     Does_Smoke == "never" ~ 1,
+     Does_Smoke == "occasionally" ~ 2,
+     Does_Smoke == "frequently" ~ 3
+    ),
+    Transportation_Use_Score = case_when(
+      Transportation_Use %in% c("Walking", "Bike") ~ 1,
+      TRUE ~ 3
+    ),
+    BMI_Score = case_when(
+      BMI < 18.5 ~ 1, # Underweight
+      BMI >= 18.5 & BMI < 25 ~ 2, # Normal weight
+      BMI >= 25 & BMI < 30 ~ 3, # Overweight
+      BMI >= 30 ~ 4  # Obesity
+    ),
+    # Aggregate Health Risk Score:
+    Health_Risk_Score = (
+      0.11 * Physical_Activity_Score + 
+      0.09 * Tech_Time_Score + 
+      0.07 * Veggie_Consumption_Score + 
+      0.10 * Family_History_Score +
+      0.10 * High_Cal_Food_Score +
+      0.07 * Food_Between_Meals_Score +
+      0.07 * Water_Consumption_Score +
+      0.09 * Smoking_Score +
+      0.07 * Transportation_Use_Score +
+      0.10 * Alcohol_Consumption_Score + # New variable
+      0.15 * BMI_Score # Keeping the BMI score with significant weight
+    )
+  )
+data7 <- select(data7, -Physical_Activity_Score, -Tech_Time_Score,-Veggie_Consumption_Score,-Family_History_Score,-High_Cal_Food_Score,-Food_Between_Meals_Score,-Water_Consumption_Score,-Transportation_Use_Score,-Alcohol_Consumption_Score,-BMI_Score, -Smoking_Score)
+head(data7)
+```
+
+```{r, echo = FALSE}
+# BMI vs HiCal_Food_Consump
+data %>%
+  ggplot(aes(x = HiCal_Food_Consump, y = BMI, fill = HiCal_Food_Consump)) +
+  geom_boxplot()
+
+ggplot(data, aes(x = BMI)) + geom_histogram(bins=20) + facet_grid(~HiCal_Food_Consump)
+```
+
+```{r, echo = FALSE}
+# BMI vs Gender
+data %>% ggplot(aes(x=BMI, fill=Gender)) + geom_density()
+
+```
+
+``` {r, echo = FALSE}
+# BMI vs Age - Younger people tend to have the most variation in BMI
+data %>% ggplot(aes(x=Age, y=BMI)) + geom_point()
+
+# Obesity_Level vs Age
+data %>% ggplot(aes(x=Obesity_Level,y=Age)) + geom_boxplot()
+
+data %>% ggplot(aes(fill=Obesity_Level,x=Age)) + geom_density()
+```
+
+```{r, echo = FALSE}
+# BMI vs Family history
+data %>%
+  ggplot(aes(x = Family_History_w_Overweight, y = BMI, fill = Family_History_w_Overweight)) +
+  geom_boxplot()
+
+data %>% ggplot(aes(x=BMI,fill=Family_History_w_Overweight)) + geom_density()
+
+data %>% ggplot(aes(x=BMI, fill=Family_History_w_Overweight)) + geom_histogram()
+```
 
 # Conclusions
 
 While we were able to construct a good scoring system to rank the variables effect of BMI and overall health we also understand that the models we used were not fully accurate and thus our scoring systems contain flaws
+
 First off, our BMI model was only at best 50% accurate as an individuals BMI involves much more variables and predictors than we had access to. In fact, the biggest predictor of weight, which is a key component in BMI, is calories consumed - burned, data we don't have access to.
 
 Finally, the age range in out dataset wasn't large or diverse enough to display the impacts of BMI and the other habits on an individuals life expectancy. That being said, we understand that our Health rating score may include some inaccuracy as well.
