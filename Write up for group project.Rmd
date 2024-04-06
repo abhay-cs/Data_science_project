@@ -16,11 +16,12 @@ Explain why we used BMI as scoring system
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
-(library(readr))
+library(readr)
 library(nnet)
 library(caret)
 library(gridExtra)
 library(Metrics)
+library(infer)
 data = read.csv("obesity.csv")
 
 data <- data %>% 
@@ -34,6 +35,179 @@ data <- data %>%
 # Add BMI variable
 data <- data %>% 
   mutate(BMI = Weight/(Height^2)) 
+```
+
+
+
+
+
+# Introduction
+
+# Methods
+
+We first made a linear regrssion model to find the significatn predictors of BMI from the relevant variables
+
+```{r}
+#clean data for linear model
+BMI_data <- select(data, -Weight, -Height, -Obesity_Level)
+set.seed(99)
+rownum <- sample(1:nrow(BMI_data), 2/3*nrow(BMI_data))
+
+train <- BMI_data[rownum,]
+test <- BMI_data[-rownum,]
+
+BMI_model <- lm(BMI ~., data = train)
+
+predict_BMI <- predict(BMI_model, newdata = test)
+
+
+summary(BMI_model)
+Metrics::rmse(test$BMI, predict_BMI)
+
+```
+
+We see our R^2 is .49 which means olf half the variability of BMI is captured by this data, this is normal for a dataset of this nature that deals with predicting humans. this is also beacuse our data is missign major predictors of obesity
+
+Based on this we can see the most significant predictors for BMI
+
+we can also find out what predicotrs have effect on level of obesity
+using multiple logistic regression
+
+```{r}
+#reclean
+level_data <- select(data, -Weight, -Height, -BMI)
+#factorize
+
+level_data$Gender <- as.factor(level_data$Gender)
+level_data$Family_History_w_Overweight <- as.factor(level_data$Family_History_w_Overweight)
+level_data$Obesity_Level <- as.factor(level_data$Obesity_Level)
+level_data$HiCal_Food_Consump <- as.factor(level_data$HiCal_Food_Consump)
+level_data$Veggie_Consump <- as.factor(level_data$Veggie_Consump)
+level_data$Main_Meal_Consump <- as.factor(level_data$Main_Meal_Consump)
+level_data$Food_bw_Meals <- as.factor(level_data$Food_bw_Meals)
+level_data$Does_Smoke <- as.factor(level_data$Does_Smoke)
+level_data$Water_Consump <- as.factor(level_data$Water_Consump)
+level_data$Monitor_Calories <- as.factor(level_data$Monitor_Calories)
+level_data$Physical_Activ_Amt <- as.factor(level_data$Physical_Activ_Amt)
+level_data$Tech_Time <- as.factor(level_data$Tech_Time)
+level_data$Alcohol_Consump <- as.factor(level_data$Alcohol_Consump)
+level_data$Transportation_Use <- as.factor(level_data$Transportation_Use)
+#train and test data
+rownum <- sample(1:nrow(level_data), 2/3*nrow(level_data))
+
+train <- level_data[rownum,]
+test <- level_data[-rownum,]
+#multiple logistic regression
+nnet_model <- multinom(Obesity_Level ~ Family_History_w_Overweight + Food_bw_Meals + HiCal_Food_Consump + Monitor_Calories + Transportation_Use + Alcohol_Consump + Does_Smoke, data = train)
+
+# Make predictions on test data
+nnet_pred <- predict(nnet_model, newdata = test, type = "class")
+
+# Evaluate model performance
+accuracy <- mean(nnet_pred == test$Obesity_Level)
+accuracy
+
+
+```
+our accuracy of our predictors to predict obesity group is around 45% which is standard for data of this nature. also it means that we need more information than the variables provided to fully predict the Obesity group of an individual
+
+based on results of first model (regression) we can test the impact or dependacy betweeen predictors and target variables
+using KW test for BMI and Chi square for Obesity Level
+
+```{r}
+library(infer)
+kruskal.test(BMI ~ Family_History_w_Overweight, data)
+kruskal.test(BMI ~ Veggie_Consump, data)
+kruskal.test(BMI ~ HiCal_Food_Consump, data)
+kruskal.test(BMI ~ Physical_Activ_Amt, data)
+kruskal.test(BMI ~ Food_bw_Meals,data)
+kruskal.test(BMI ~ Main_Meal_Consump, data)
+kruskal.test(BMI ~ Water_Consump, data)
+kruskal.test(BMI ~ Monitor_Calories, data)
+kruskal.test(BMI ~ Transportation_Use, data)
+kruskal.test(BMI ~ Tech_Time, data)
+kruskal.test(BMI ~ Age, data)
+#we also test effect of bmi and obesity level on age
+kruskal.test(Age ~ BMI, data)
+kruskal.test(Age ~ Obesity_Level, data)
+#we can see the while BMI itself doesnt affect age, the obesity level does
+
+
+#if the tests indicate a significant differece in BMI across groups (low P) we move forward with Chisquare test
+
+
+
+chisq_test(level_data, formula = Obesity_Level ~ Family_History_w_Overweight)
+chisq_test(level_data, formula = Obesity_Level ~ HiCal_Food_Consump)
+chisq_test(level_data, formula = Obesity_Level ~ Physical_Activ_Amt)
+chisq_test(level_data, formula = Obesity_Level ~ Food_bw_Meals)
+chisq_test(level_data, formula = Obesity_Level ~ Water_Consump)
+chisq_test(level_data, formula = Obesity_Level ~ Monitor_Calories)
+chisq_test(level_data, formula = Obesity_Level ~ Transportation_Use)
+chisq_test(level_data, formula = Obesity_Level ~ Tech_Time)
+##all passed chiquare test to indicate the depenacy or relationship between them and obesity level is not random
+
+```
+```{r}
+data2<-data
+data2$Age40 <- ifelse(data2$Age > 40, 1, 0)
+data2$BMI35 <- ifelse(data2$BMI > 35, 1, 0)
+ # Fit logistic regression model
+log_model4035 <- glm(Age40 ~ BMI35, data = data2, family = binomial)
+summary(log_model4035)
+
+```
+Overall, based on these results, there is no statistically significant evidence to suggest that having a BMI over 35 affects the likelihood of an individual being younger than 40 years old, as the coefficient for BMI35 is not significant. However we can use these results to find the likelihood that an individual is over 40 if their BMI is greater than 35
+
+Intercept (Estimated Coefficient: -3.4795): The intercept represents the estimated log odds of an individual being younger than 40 years old when they do not have a BMI over 35. A negative coefficient suggests that individuals who do not have a BMI over 35 are less likely to be younger than 40 years old.
+
+BMI35 (Estimated Coefficient: -0.4224): The coefficient for BMI35 represents the change in the log odds of an individual being younger than 40 years old when they have a BMI over 35 compared to when they do not have a BMI over 35. Here, however, we're interested in how it affects the likelihood of an individual being older than 40 years old. Given that the coefficient is negative, it implies that individuals with a BMI over 35 are less likely to be older than 40 years old.
+
+
+Now i will find the probability an individual is over 40 years old if their BMI is greater than 35 (Obesity type 2)
+
+```{r}
+
+intercept <- -3.4795
+BMI35_coefficient <- -0.4224
+
+# BMI value indicating over 35
+BMI_over_35 <- 1
+
+# Calculate log odds
+log_odds <- intercept + BMI35_coefficient * BMI_over_35
+
+# Convert log odds to probability using logistic function
+probability_over_40 <- exp(log_odds) / (1 + exp(log_odds))
+
+# Print the result
+probability_over_40
+
+
+```
+As you can see, the probability that an individual is older than 40 if their BMI is 35< is around 1% which is very low likelylihood.
+
+
+# Results
+
+Our results show what variables are predictors of BMI and Obesity group, we will use this info to construct a scoring system based on obesity risk. Our result also point to the fact that Age is significantly influence by an individuals Obesity level especially Obesity Type 2 and 3
+we will use this info to constuct a health risk scoring system which will use the variables impact on an individuals age
+
+
+
+```{r}
+
+
+
+```
+
+```{r}
+# BMI vs HiCal_Food_Consump
+data %>%
+  ggplot(aes(x = HiCal_Food_Consump, y = BMI, fill = HiCal_Food_Consump)) +
+  geom_boxplot()
+
+ggplot(data, aes(x = BMI)) + geom_histogram(bins=20) + facet_grid(~HiCal_Food_Consump)
 ```
 
 ```{r}
@@ -63,107 +237,12 @@ data %>% ggplot(aes(x=BMI,fill=Family_History_w_Overweight)) + geom_density()
 data %>% ggplot(aes(x=BMI, fill=Family_History_w_Overweight)) + geom_histogram()
 ```
 
-```{r}
-# BMI vs HiCal_Food_Consump
-data %>%
-  ggplot(aes(x = HiCal_Food_Consump, y = BMI, fill = HiCal_Food_Consump)) +
-  geom_boxplot()
-
-ggplot(data, aes(x = BMI)) + geom_histogram(bins=20) + facet_grid(~HiCal_Food_Consump)
-```
-
-# Introduction
-
-# Methods
-
-We first made a linear regrssion model to find the significatn predictors of BMI from the relevant variables
-
-```{r}
-#clean data for linear model
-BMI_data <- select(data, -Weight, -Height, -Obesity_Level)
-set.seed(99)
-rownum <- sample(1:nrow(BMI_data), 2/3*nrow(BMI_data))
-
-train <- BMI_data[rownum,]
-test <- BMI_data[-rownum,]
-
-BMI_model <- lm(BMI ~., data = train)
-
-predict_BMI <- predict(BMI_model, newdata = test)
-
-
-summary(BMI_model)
-Metrics::rmse(test$BMI, predict_BMI)
-
-```
-Based on this we can see the most significant predictors for BMI
-
-we can also find out what predicotrs have effect on level of obesity
-
-
-```{r}
-level_data <- select(data, -Weight, -Height, -BMI)
-
-
-level_data$Gender <- as.factor(level_data$Gender)
-level_data$Family_History_w_Overweight <- as.factor(level_data$Family_History_w_Overweight)
-level_data$Obesity_Level <- as.factor(level_data$Obesity_Level)
-level_data$HiCal_Food_Consump <- as.factor(level_data$HiCal_Food_Consump)
-level_data$Veggie_Consump <- as.factor(level_data$Veggie_Consump)
-level_data$Main_Meal_Consump <- as.factor(level_data$Main_Meal_Consump)
-level_data$Food_bw_Meals <- as.factor(level_data$Food_bw_Meals)
-level_data$Does_Smoke <- as.factor(level_data$Does_Smoke)
-level_data$Water_Consump <- as.factor(level_data$Water_Consump)
-level_data$Monitor_Calories <- as.factor(level_data$Monitor_Calories)
-level_data$Physical_Activ_Amt <- as.factor(level_data$Physical_Activ_Amt)
-level_data$Tech_Time <- as.factor(level_data$Tech_Time)
-level_data$Alcohol_Consump <- as.factor(level_data$Alcohol_Consump)
-level_data$Transportation_Use <- as.factor(level_data$Transportation_Use)
-
-rownum <- sample(1:nrow(level_data), 2/3*nrow(level_data))
-
-train <- level_data[rownum,]
-test <- level_data[-rownum,]
-
-nnet_model <- multinom(Obesity_Level ~ Family_History_w_Overweight + Food_bw_Meals + HiCal_Food_Consump, data = train)
-
-# Make predictions on test data
-nnet_pred <- predict(nnet_model, newdata = test, type = "class")
-
-# Evaluate model performance
-accuracy <- mean(nnet_pred == test$Obesity_Level)
-accuracy
-
-
-```
-based on results of models we can test the impact or dependacy betweeen predictors and target variables
-using KW test for BMI and Chi square for Obesity Level
-
-```{r}
-library(infer)
-kruskal.test(BMI ~ Family_History_w_Overweight, data)
-kruskal.test(BMI ~ Veggie_Consump, data)
-kruskal.test(BMI ~ HiCal_Food_Consump, data)
-kruskal.test(BMI ~ Physical_Activ_Amt, data)
-
-
-chisq_test(level_data, formula = Obesity_Level ~ Family_History_w_Overweight)
-chisq_test(level_data, formula = Family_History_w_Overweight ~Obesity_Level )
-
-```
-
-
-# Results
-
-
-```{r}
-
-
-
-```
-
 # Conclusions
 
+While we were able to constuct a good scoring system to rank the varaibles effect of BMI and overall health we also understand that the models we used were not fully acurate and thus our scoring systems contain flaws
+first our BMI model was only at best 50% accurate as an individuals BMI involves much more variables and predictors than we have access to, in fact, the biggest predictor of weight, which is a key component in BMI is calories consumed - burned, data we dont have access to.
+
+secondly, the age range in out dataset wasnt large or diverse enough to display the impacts of BMI and the other habits on an individuals life expectancy. as such we understand that our Health rating score may include some inaccuracy as well.
 
 ```{r}
 
