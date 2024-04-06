@@ -43,6 +43,12 @@ data <- data %>%
 
 # Introduction
 
+This report investigates obesity and its related health risks using a dataset on individual characteristics and habits. Our primary goal was to identify significant factors influencing Body Mass Index (BMI) and use this information to construct a scoring system for obesity risk and overall health risk.
+
+BMI is a commonly used metric to assess weight status and potential obesity risk. It is calculated using an individual's weight and height. While BMI is a valuable tool, it has limitations. For instance, it doesn't account for muscle mass, which can be high in some individuals with healthy weight.
+
+This report acknowledges these limitations but utilizes BMI as a starting point for our analysis. We explore the factors impacting BMI and leverage this knowledge to build a multi-variable scoring system for both obesity risk and health risk associated with high BMI.
+
 # Methods
 
 After viewing the correlation Matrix and computing BMI as the Gold standard, out first step in gathering information on our data was to make a linear regression model in order to find the significant predictors of BMI from the relevant variables.
@@ -339,6 +345,8 @@ Obesity Risk Score: The aggregate score, with specific weights assigned to each 
   )
 data6 <- data6 %>% select(-Physical_Activity_Score, -Tech_Time_Score, -Family_History_Score, -High_Cal_Food_Score, -Food_Between_Meals_Score, -Water_Consumption_Score,- Monitor_Calories_Score,-Transportation_Use_Score,-BMI_Score)
 
+```
+```{r}
 head(data6)
 ```
 # Health Risk
@@ -419,7 +427,9 @@ data7 <- data %>%
     )
   )
 data7 <- select(data7, -Physical_Activity_Score, -Tech_Time_Score,-Veggie_Consumption_Score,-Family_History_Score,-High_Cal_Food_Score,-Food_Between_Meals_Score,-Water_Consumption_Score,-Transportation_Use_Score,-Alcohol_Consumption_Score,-BMI_Score, -Smoking_Score)
+```
 
+```{r}
 head(data7)
 ```
 
