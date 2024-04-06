@@ -256,12 +256,116 @@ Our results showed what variables are predictors of BMI and Obesity group, we us
 
 We also gathered enough information to construct a health risk scoring system which is based upon the variables impact on an individuals ability to reach an old age.
 
+## Scoring Systems
 
+# Obesity Risk Score
+Physical Activity Score: Lower scores are assigned for higher amounts of physical activity, reflecting its role in reducing obesity risk. This emphasizes the protective effect of physical activity against obesity.
+
+Tech Time Score: Increased screen time, captured as Tech Time, is associated with higher scores, indicating its negative impact due to sedentary behavior.
+
+Vegetable Consumption Score: Higher vegetable consumption is rewarded with lower scores, supporting the role of a plant-rich diet in maintaining a healthy weight.
+
+Family History Score: A positive family history of overweight or obesity significantly increases the score, acknowledging the genetic and environmental influence on obesity risk.
+
+High-Calorie Food Score and Food Between Meals Score: High scores for high calorie food consumption and frequent eating between meals highlight their contribution to caloric excess and obesity.
+
+Water Consumption Score: Higher water consumption, indicative of healthier lifestyle choices, is assigned lower scores.
+
+Monitor Calories Score: Engaging in monitoring calories is seen as a positive behavior and thus receives a lower score, reflecting its importance in weight management.
+
+Transportation Use Score: Preference for active modes of transportation like walking or biking scores lower, aligning with the promotion of physical activity.
+
+BMI Score: Directly incorporates the WHO classification of BMI into the scoring, with higher categories of BMI receiving higher scores to directly account for current weight status in the obesity risk assessment.
+
+Obesity Risk Score: The aggregate score, with specific weights assigned to each factor, integrates these diverse elements into a comprehensive measure of obesity risk. The weights reflect the perceived impact of each factor on obesity risk, with significant factors like physical activity, family history, and BMI itself given slightly more influence
 
 ```{r}
+ data6 <- data %>%
+  mutate(
+    # Existing Scores
+    Physical_Activity_Score = case_when(
+      Physical_Activ_Amt <= 1 ~ 3,
+      Physical_Activ_Amt > 1 & Physical_Activ_Amt <= 2 ~ 2,
+      Physical_Activ_Amt > 2 ~ 1
+    ),
+    Tech_Time_Score = case_when(
+      Tech_Time <= 1 ~ 1,
+      Tech_Time > 1 & Tech_Time <= 2 ~ 2,
+      Tech_Time > 2 ~ 3
+    ),
+    Veggie_Consumption_Score = case_when(
+      Veggie_Consump < 2 ~ 3,
+      Veggie_Consump >= 2 & Veggie_Consump <= 3 ~ 2,
+      Veggie_Consump > 3 ~ 1
+    ),
+    Family_History_Score = case_when(
+      Family_History_w_Overweight == "yes" ~ 3,
+      TRUE ~ 1
+    ),
+    # New Scores
+    High_Cal_Food_Score = case_when(
+      HiCal_Food_Consump <= 2 ~ 1,
+      HiCal_Food_Consump > 2 ~ 3
+    ),
+    Food_Between_Meals_Score = case_when(
+      Food_bw_Meals <= 2 ~ 1,
+      Food_bw_Meals > 2 ~ 3
+    ),
+    Water_Consumption_Score = case_when(
+      Water_Consump < 2 ~ 3,
+      Water_Consump >= 2 & Water_Consump <= 3 ~ 2,
+      Water_Consump > 3 ~ 1
+    ),
+    Monitor_Calories_Score = case_when(
+      Monitor_Calories == "yes" ~ 1,
+      TRUE ~ 3
+    ),
+    Transportation_Use_Score = case_when(
+      Transportation_Use %in% c("Walking", "Bike") ~ 1,
+      TRUE ~ 3
+    ),
+    # Aggregate Obesity Risk Score: Adjust weights as necessary
+    Obesity_Risk_Score = (
+      0.15 * Physical_Activity_Score + 
+        0.10 * Tech_Time_Score + 
+        0.10 * Veggie_Consumption_Score + 
+        0.15 * Family_History_Score +
+        0.10 * High_Cal_Food_Score +
+        0.10 * Food_Between_Meals_Score +
+        0.10 * Water_Consumption_Score +
+        0.10 * Monitor_Calories_Score +
+        0.10 * Transportation_Use_Score
+    )
+  )
+```
+# Health Risk
+This system is specifically designed to assess health risks associated with high BMI, incorporating similar variables from the obesity risk system but adding alcohol consumption into the mix. The rationale behind each variable remains consistent, with a few adjustments in weighting to accommodate the new variable:
 
+Alcohol Consumption is introduced as a factor with its score increasing with higher consumption levels due to the caloric intake and lifestyle impacts associated with alcohol use.
+The Health Risk Score similarly aggregates these scores, with adjustments in weights to balance the impact of each factor, including alcohol consumption. A higher cumulative score in this system also indicates a higher health risk related to high BMI.
 
-
+```{r}
+data7 <- data %>%
+  mutate(
+    Alcohol_Consumption_Score = case_when(
+      Alcohol_Consump <= 1 ~ 1, # Low consumption
+      Alcohol_Consump > 1 & Alcohol_Consump <= 2 ~ 2, # Moderate consumption
+      Alcohol_Consump > 2 ~ 3 # High consumption
+    ),
+    Health_Risk_Score = (
+      0.10 * Physical_Activity_Score + 
+      0.08 * Tech_Time_Score + 
+      0.08 * Veggie_Consumption_Score + 
+      0.10 * Family_History_Score +
+      0.10 * High_Cal_Food_Score +
+      0.08 * Food_Between_Meals_Score +
+      0.08 * Water_Consumption_Score +
+      0.08 * Monitor_Calories_Score +
+      0.08 * Transportation_Use_Score +
+      0.10 * Alcohol_Consumption_Score + # New variable
+      0.12 * BMI_Score # Keeping the BMI score with significant weight
+    )
+  )
 ```
 
 ```{r, echo = FALSE}
