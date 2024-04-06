@@ -45,7 +45,9 @@ data <- data %>%
 
 # Methods
 
-We first made a linear regression model to find the significant predictors of BMI from the relevant variables
+After viewing the correlation Matrix and computing BMI as the Gold standard, out first step to gather information on our data was to make a linear regression model to find the significant predictors of BMI from the relevant variables.
+
+Since BMi is calculated using weight/Height^2 and Obesity level is calculated based on BMI, we first needed to clean the data to build an appropriate model by removing these variables.
 
 ```{r, echo = FALSE}
 #clean data for linear model
@@ -68,11 +70,11 @@ Metrics::rmse(test$BMI, predict_BMI)
 
 ```
 
-We see our R^2 is .49 which means only half the variability of BMI is captured by this data, this is normal for a dataset of this nature that deals with predicting humans. this is also because our data is missing major predictors of obesity like calorie intake
+From the summary of our model, we noted that our R^2 is .49 which means only half the variability of BMI was captured by this data. This is normal for a dataset of this nature which deals with predicting humans. This low value is also justified because our data is missing major predictors of obesity like calorie intake.
 
-Based on the model we can see the most significant predictors for BMI
+Based on the model we were able to find the most significant predictors for BMI from the P-values provided
 
-We can also find out what predictors have effect on level of obesity using multiple logistic regression
+We were also able to find out how accurate these predictors were in predicting an individuals level of obesity by performing multiple logistic regression using Obesity level as the target.
 
 ```{r, echo = FALSE, include = FALSE}
 #reclean
@@ -112,11 +114,11 @@ accuracy <- mean(nnet_pred == test$Obesity_Level)
 accuracy
 ```
 
-the accuracy of our predictors to predict obesity group is around 45% which is standard for data of this nature. also it means that we need more information than the variables provided to fully predict the Obesity group for an individual
+The accuracy of our predictors ability to predict obesity group was around 45% which is standard for data of this nature. It also means that we need more information than the variables provided to fully predict the Obesity group for an individual.
 
-based on results of first model (regression) we will now test the impact/dependency between the significant predictors of the target variable BMI , and BMI using Kruskal-Wallis tests. If a predictor has a significant impact on BMI, we will then perform a Chi-Square test to determine if this relationship is significant or random using the Obesity level, a health based grouping of BMI values. Based on these test result we will be able to determine the significant predictors of an individuals BMI
+Based on results of first model (regression) we tested the impact/dependency between the significant predictors BMI, and BMI using Kruskal-Wallis tests. If a predictor has a significant impact on BMI, we will then perform a Chi-Square test to determine if this relationship is significant or random using the Obesity level, a health based grouping of BMI values. Based on these test results we were be able to determine the significant predictors of an individuals BMI
 
-Also, in order to test the effects of BMI on an individuals health we will perform a Kruskal-Wallis test to measure the effect of BMI on an individuals age as well as the effect of Obesity level on age
+Also, in order to test the effects of BMI on an individuals health we performed a Kruskal-Wallis test to measure the effect of BMI on an individuals age as well as the effect of Obesity level on age.
 
 
 ```{r, echo = FALSE, include=FALSE}
@@ -153,20 +155,27 @@ chisq_test(level_data, formula = Obesity_Level ~ Tech_Time)
 ##all passed chiquare test to indicate the depenacy or relationship between them and obesity level is not random
 
 ```
-As a result of the aformentioned tests, have now established the significant predictors of obesity:
+As a result of the aforementioned tests, we were able to establish the significant predictors of obesity:
 
 Family History of Overweight
+
 Hi Calorie Food Consumption
+
 Physical Activity
+
 Food between Meals
+
 Water Consumption
+
 Monitor Calories
+
 Transportation Use
+
 Tech Time
 
 We also learned that while BMI itself doesn't have a significant impact on age, an individuals obesity level does.
 
-Armed with these insights, we will now determine how much obesity level impacts age by performing a logistic regression predicting age using BMI. Before we do this, we will plot a regression line of BMI and age at different age ranges to visualize how this relationship works.
+Armed with these insights, we went on to determine how much obesity level impacts age by performing a logistic regression predicting age using BMI. Before we did this, we plotted and analyzed a regression line of BMI and age at different age ranges to visualize this relationship.
 
 
 ```{r, echo = FALSE}
@@ -197,9 +206,9 @@ ggplot(data5, aes(x = Age, y = BMI)) +
 ```
 
 
-Based on the plots, it is apparent that as the age of the observations increase, the maximum BMI observed decreases. We can extrapolate that younger individuals tend to have higher BMIs as there bodies are not stable and fully developed yet, however as one ages, a high BMI can lead to health complications which could be the reason for a decrease in observations. Based on these result we can now perform our logistic regression. 
+Based on the plots, it was apparent that as the age of the observations increase, the maximum BMI observed decreases. We then extrapolated that younger individuals tend to have higher BMIs as physically, their bodies are not stable or fully developed yet. We then inferred that as one ages, a high BMI can lead to health complications which could be the reason for a decrease in observations. Based on these result we then performed our logistic regression. 
 
-in order to avoid skewing the data, as BMI can often be misinterpreted for younger and developing individuals, we will take a look at the effect of type 2 obesity (BMI > 35) on whether an individual is older than 40 years old
+In order to avoid skewing the data, as BMI can often be misinterpreted for younger and developing individuals, we took a look at the effect of type 2 obesity (BMI > 35) on whether an individual is older than 40 years old.
 
 
 ```{r}
@@ -211,13 +220,13 @@ log_model4035 <- glm(Age40 ~ BMI35, data = data2, family = binomial)
 summary(log_model4035)
 
 ```
-Overall, based on these results, there is no statistically significant evidence to suggest that having a BMI over 35 affects the likelihood of an individual being younger than 40 years old, as the coefficient for BMI35 is not significant. However we can use these results to find the likelihood that an individual is over 40 if their BMI is greater than 35
+Overall, based on these results, there was no statistically significant evidence to suggest that having a BMI over 35 affects the likelihood of an individual being younger than 40 years old, as the coefficient for BMI35 was not significant. However we used these results to find the likelihood that an individual is over 40 if their BMI is greater than 35
 
 intercept (Estimated Coefficient: -3.4795): The intercept represents the estimated log odds of an individual being younger than 40 years old when they do not have a BMI over 35. A negative coefficient suggests that individuals who do not have a BMI over 35 are less likely to be younger than 40 years old.
 
 BMI35 (Estimated Coefficient: -0.4224): The coefficient for BMI35 represents the change in the log odds of an individual being younger than 40 years old when they have a BMI over 35 compared to when they do not have a BMI over 35. Here, however, we're interested in how it affects the likelihood of an individual being older than 40 years old. Given that the coefficient is negative, it implies that individuals with a BMI over 35 are less likely to be older than 40 years old.
 
-Now we will find the probability an individual is over 40 years old if their BMI is greater than 35 (Obesity type 2)
+Now from this we were able to find the probability an individual is over 40 years old if their BMI is greater than 35 (Obesity type 2)
 
 ```{r}
 
@@ -238,13 +247,14 @@ probability_over_40
 
 
 ```
-As you can see, the probability that an individual is older than 40 if their BMI is >35 is around 1% which is very low likelihood. this suggests some form of missing data which we believe is not random as our results show that the higher in age, the lower the instances of very high BMI. In fact the maximum BMI observed decreases inversely with age. we extrapolate this data by assuming that this is caused due to health complications that we will attribute to obesity, and we will uses this as the basis for our health scoring system
+As you can see, the probability that an individual is older than 40 if their BMI is >35 is around 1% which is very low likelihood. This may suggest some form of missing data which we believe is not random as our results show that the higher in age, the lower the instances of very high BMI. In fact the maximum BMI observed decreases inversely with age. We further extrapolated this data using this information by assuming that this is caused due to health complications that we will attribute to obesity. this conclusion was uses as the basis for our health scoring system
 
 
 # Results
 
-Our results show what variables are predictors of BMI and Obesity group, we will use this info to construct a scoring system based on obesity risk. Our result also point to the fact that Age is significantly influence by an individuals Obesity level especially Obesity Type 2 and 3
-we will use this info to constuct a health risk scoring system which will use the variables impact on an individuals age
+Our results showed what variables are predictors of BMI and Obesity group, we used this info to construct a scoring system based which asseses obesity risk. Our result also pointed to the fact that Age is significantly influenced by an individuals Obesity level especially if they were classified as Obesity Type 2 or 3.
+
+We also gathered enough information to construct a health risk scoring system which is based upon the variables impact on an individuals ability to reach an old age.
 
 
 
@@ -293,9 +303,9 @@ data %>% ggplot(aes(x=BMI, fill=Family_History_w_Overweight)) + geom_histogram()
 # Conclusions
 
 While we were able to construct a good scoring system to rank the variables effect of BMI and overall health we also understand that the models we used were not fully accurate and thus our scoring systems contain flaws
-first our BMI model was only at best 50% accurate as an individuals BMI involves much more variables and predictors than we have access to, in fact, the biggest predictor of weight, which is a key component in BMI is calories consumed - burned, data we don't have access to.
+First off, our BMI model was only at best 50% accurate as an individuals BMI involves much more variables and predictors than we had access to. In fact, the biggest predictor of weight, which is a key component in BMI, is calories consumed - burned, data we don't have access to.
 
-secondly, the age range in out dataset wasn't large or diverse enough to display the impacts of BMI and the other habits on an individuals life expectancy. as such we understand that our Health rating score may include some inaccuracy as well.
+Finally, the age range in out dataset wasn't large or diverse enough to display the impacts of BMI and the other habits on an individuals life expectancy. That being said, we understand that our Health rating score may include some inaccuracy as well.
 
 ```{r}
 
