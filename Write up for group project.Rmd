@@ -292,11 +292,6 @@ Obesity Risk Score: The aggregate score, with specific weights assigned to each 
       Tech_Time > 1 & Tech_Time <= 2 ~ 2,
       Tech_Time > 2 ~ 3
     ),
-    Veggie_Consumption_Score = case_when(
-      Veggie_Consump < 2 ~ 3,
-      Veggie_Consump >= 2 & Veggie_Consump <= 3 ~ 2,
-      Veggie_Consump > 3 ~ 1
-    ),
     Family_History_Score = case_when(
       Family_History_w_Overweight == "yes" ~ 3,
       TRUE ~ 1
@@ -333,7 +328,6 @@ Obesity Risk Score: The aggregate score, with specific weights assigned to each 
     Obesity_Risk_Score = (
       0.13 * Physical_Activity_Score + 
       0.09 * Tech_Time_Score + 
-      0.09 * Veggie_Consumption_Score + 
       0.13 * Family_History_Score +
       0.09 * High_Cal_Food_Score +
       0.09 * Food_Between_Meals_Score +
