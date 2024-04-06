@@ -337,7 +337,7 @@ Obesity Risk Score: The aggregate score, with specific weights assigned to each 
       0.15 * BMI_Score # Adjusted weight for BMI
     )
   )
-data6 <- data6 %>% select(-Physical_Activity_Score, -Tech_Time_Score, -Veggie_Consumption_Score, -Family_History_Score, -High_Cal_Food_Score, -Food_Between_Meals_Score, -Water_Consumption_Score,- Monitor_Calories_Score,-Transportation_Use_Score,-BMI_Score)
+data6 <- data6 %>% select(-Physical_Activity_Score, -Tech_Time_Score, -Family_History_Score, -High_Cal_Food_Score, -Food_Between_Meals_Score, -Water_Consumption_Score,- Monitor_Calories_Score,-Transportation_Use_Score,-BMI_Score)
 head(data6)
 ```
 # Health Risk
