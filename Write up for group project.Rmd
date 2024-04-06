@@ -239,7 +239,7 @@ probability_over_40
 
 
 ```
-As you can see, the probability that an individual is older than 40 if their BMI is >35 is around 1% which is very low likelylihood. this suggests some form of missing data which we believe is not random as our results show that the higher in age, the lower the instances of very high BMI. In fact the maximum BMI observed decreases inversly with age. we exrapolate this data by assuming that this is caused due to health complications that we will attribute to obesity, and we will uses this as the basis for our health scoring system
+As you can see, the probability that an individual is older than 40 if their BMI is >35 is around 1% which is very low likelihood. this suggests some form of missing data which we believe is not random as our results show that the higher in age, the lower the instances of very high BMI. In fact the maximum BMI observed decreases inversely with age. we extrapolate this data by assuming that this is caused due to health complications that we will attribute to obesity, and we will uses this as the basis for our health scoring system
 
 
 # Results
@@ -293,10 +293,10 @@ data %>% ggplot(aes(x=BMI, fill=Family_History_w_Overweight)) + geom_histogram()
 
 # Conclusions
 
-While we were able to constuct a good scoring system to rank the varaibles effect of BMI and overall health we also understand that the models we used were not fully acurate and thus our scoring systems contain flaws
-first our BMI model was only at best 50% accurate as an individuals BMI involves much more variables and predictors than we have access to, in fact, the biggest predictor of weight, which is a key component in BMI is calories consumed - burned, data we dont have access to.
+While we were able to construct a good scoring system to rank the variables effect of BMI and overall health we also understand that the models we used were not fully accurate and thus our scoring systems contain flaws
+first our BMI model was only at best 50% accurate as an individuals BMI involves much more variables and predictors than we have access to, in fact, the biggest predictor of weight, which is a key component in BMI is calories consumed - burned, data we don't have access to.
 
-secondly, the age range in out dataset wasnt large or diverse enough to display the impacts of BMI and the other habits on an individuals life expectancy. as such we understand that our Health rating score may include some inaccuracy as well.
+secondly, the age range in out dataset wasn't large or diverse enough to display the impacts of BMI and the other habits on an individuals life expectancy. as such we understand that our Health rating score may include some inaccuracy as well.
 
 ```{r}
 
