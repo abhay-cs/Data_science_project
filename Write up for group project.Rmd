@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Intro
 Explain why we used BMI as scoring system
 
-```{r}
+```{r, echo = FALSE, include = FALSE}
 # Initialization of data
 library(tidyverse)
 library(ggplot2)
@@ -47,7 +47,7 @@ data <- data %>%
 
 We first made a linear regression model to find the significant predictors of BMI from the relevant variables
 
-```{r}
+```{r, echo = FALSE}
 #clean data for linear model
 BMI_data <- select(data, -Weight, -Height, -Obesity_Level)
 set.seed(99)
@@ -62,6 +62,8 @@ predict_BMI <- predict(BMI_model, newdata = test)
 
 
 summary(BMI_model)
+
+print("RMSE:")
 Metrics::rmse(test$BMI, predict_BMI)
 
 ```
@@ -72,7 +74,7 @@ Based on the model we can see the most significant predictors for BMI
 
 We can also find out what predictors have effect on level of obesity using multiple logistic regression
 
-```{r}
+```{r, echo = FALSE, include = FALSE}
 #reclean
 level_data <- select(data, -Weight, -Height, -BMI)
 #factorize
@@ -104,16 +106,20 @@ nnet_pred <- predict(nnet_model, newdata = test, type = "class")
 
 # Evaluate model performance
 accuracy <- mean(nnet_pred == test$Obesity_Level)
-accuracy
-
 
 ```
+```{r}
+accuracy
+```
+
 the accuracy of our predictors to predict obesity group is around 45% which is standard for data of this nature. also it means that we need more information than the variables provided to fully predict the Obesity group for an individual
 
-based on results of first model (regression) we can test the impact/dependency between predictors and target variables
-using Kruskal-Wallis test for BMI and Chi-Square for Obesity Level
+based on results of first model (regression) we will now test the impact/dependency between the significant predictors of the target variable BMI , and BMI using Kruskal-Wallis tests. If a predictor has a significant impact on BMI, we will then perform a Chi-Square test to determine if this relationship is significant or random when compared to the Obesity level, a health based grouping of BMI. Based on these test result we will be able to determine the significant predictors of an individuals BMI
 
-```{r}
+Also, in order to test the effects of BMI on an individuals health we will perform a kruskal test on the effect of BMI on individual age as well as the effect of Obesity level on an individuals age
+
+
+```{r, echo = FALSE, include=FALSE}
 library(infer)
 kruskal.test(BMI ~ Family_History_w_Overweight, data)
 kruskal.test(BMI ~ Veggie_Consump, data)
@@ -147,7 +153,7 @@ chisq_test(level_data, formula = Obesity_Level ~ Tech_Time)
 ##all passed chiquare test to indicate the depenacy or relationship between them and obesity level is not random
 
 ```
-we have now established the significant predictors of obesity:
+As a result of the aformentioned tests, have now established the significant predictors of obesity:
 
 Family History of Overweight
 Hi Calorie Food Consumption
@@ -158,7 +164,42 @@ Monitor Calories
 Transportation Use
 Tech Time
 
-next we will determine how much obesity level impacts age by performing a logistic regression predicting age using BMI. to avoid skewing the data, as BMI can often be misinterpreted for younger and developing individuals, we will take a look at the effect of type 2 obesity (BMI > 35) on whether an individual is older than 40 years old
+We also learned that while BMI itself doesnt have a significant impact on age, an individuals obesity level does.
+
+Amred with these insights, we will determine how much obesity level impacts age by performing a logistic regression predicting age using BMI. Before we do this, we will plot a regression line of BMI and age at different age ranges to visualize how this relationship works.
+
+
+```{r, echo = FALSE}
+
+data3 <- data %>% filter(Age > 20)
+data4 <- data %>% filter(Age > 30)
+data5 <- data %>% filter(Age > 40)
+
+ggplot(data, aes(x = Age, y = BMI)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Age vs. BMI", x = "Age", y = "BMI")
+ggplot(data3, aes(x = Age, y = BMI)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Age > 20 vs. BMI", x = "Age", y = "BMI")
+ggplot(data4, aes(x = Age, y = BMI)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Age > 30 vs. BMI", x = "Age", y = "BMI")
+ggplot(data5, aes(x = Age, y = BMI)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Age > 40 vs. BMI", x = "Age", y = "BMI")
+
+
+
+```
+
+
+Based on the plots, it is apparent that as the age of the observations increase, the maximum BMI observed decreases. We can extrapolate that younger individuals tend to have higher BMIs as there bodies are not stable and fully developed yet, however as one ages, a high BMI can lead to health complications which could be the reason for a decrease in observations. Based on these result we can now perform our logistic regression. 
+
+in order to avoid skewing the data, as BMI can often be misinterpreted for younger and developing individuals, we will take a look at the effect of type 2 obesity (BMI > 35) on whether an individual is older than 40 years old
 
 
 ```{r}
@@ -214,7 +255,7 @@ we will use this info to constuct a health risk scoring system which will use th
 
 ```
 
-```{r}
+```{r, echo = FALSE}
 # BMI vs HiCal_Food_Consump
 data %>%
   ggplot(aes(x = HiCal_Food_Consump, y = BMI, fill = HiCal_Food_Consump)) +
@@ -223,13 +264,13 @@ data %>%
 ggplot(data, aes(x = BMI)) + geom_histogram(bins=20) + facet_grid(~HiCal_Food_Consump)
 ```
 
-```{r}
+```{r, echo = FALSE}
 # BMI vs Gender
 data %>% ggplot(aes(x=BMI, fill=Gender)) + geom_density()
 
 ```
 
-``` {r}
+``` {r, echo = FALSE}
 # BMI vs Age - Younger people tend to have the most variation in BMI
 data %>% ggplot(aes(x=Age, y=BMI)) + geom_point()
 
@@ -239,7 +280,7 @@ data %>% ggplot(aes(x=Obesity_Level,y=Age)) + geom_boxplot()
 data %>% ggplot(aes(fill=Obesity_Level,x=Age)) + geom_density()
 ```
 
-```{r}
+```{r, echo = FALSE}
 # BMI vs Family history
 data %>%
   ggplot(aes(x = Family_History_w_Overweight, y = BMI, fill = Family_History_w_Overweight)) +
