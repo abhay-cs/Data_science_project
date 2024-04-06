@@ -114,9 +114,9 @@ accuracy
 
 the accuracy of our predictors to predict obesity group is around 45% which is standard for data of this nature. also it means that we need more information than the variables provided to fully predict the Obesity group for an individual
 
-based on results of first model (regression) we will now test the impact/dependency between the significant predictors of the target variable BMI , and BMI using Kruskal-Wallis tests. If a predictor has a significant impact on BMI, we will then perform a Chi-Square test to determine if this relationship is significant or random when compared to the Obesity level, a health based grouping of BMI. Based on these test result we will be able to determine the significant predictors of an individuals BMI
+based on results of first model (regression) we will now test the impact/dependency between the significant predictors of the target variable BMI , and BMI using Kruskal-Wallis tests. If a predictor has a significant impact on BMI, we will then perform a Chi-Square test to determine if this relationship is significant or random using the Obesity level, a health based grouping of BMI values. Based on these test result we will be able to determine the significant predictors of an individuals BMI
 
-Also, in order to test the effects of BMI on an individuals health we will perform a kruskal test on the effect of BMI on individual age as well as the effect of Obesity level on an individuals age
+Also, in order to test the effects of BMI on an individuals health we will perform a Kruskal-Wallis test to measure the effect of BMI on an individuals age as well as the effect of Obesity level on age
 
 
 ```{r, echo = FALSE, include=FALSE}
@@ -164,9 +164,9 @@ Monitor Calories
 Transportation Use
 Tech Time
 
-We also learned that while BMI itself doesnt have a significant impact on age, an individuals obesity level does.
+We also learned that while BMI itself doesn't have a significant impact on age, an individuals obesity level does.
 
-Amred with these insights, we will determine how much obesity level impacts age by performing a logistic regression predicting age using BMI. Before we do this, we will plot a regression line of BMI and age at different age ranges to visualize how this relationship works.
+Armed with these insights, we will now determine how much obesity level impacts age by performing a logistic regression predicting age using BMI. Before we do this, we will plot a regression line of BMI and age at different age ranges to visualize how this relationship works.
 
 
 ```{r, echo = FALSE}
@@ -216,7 +216,6 @@ Overall, based on these results, there is no statistically significant evidence 
 intercept (Estimated Coefficient: -3.4795): The intercept represents the estimated log odds of an individual being younger than 40 years old when they do not have a BMI over 35. A negative coefficient suggests that individuals who do not have a BMI over 35 are less likely to be younger than 40 years old.
 
 BMI35 (Estimated Coefficient: -0.4224): The coefficient for BMI35 represents the change in the log odds of an individual being younger than 40 years old when they have a BMI over 35 compared to when they do not have a BMI over 35. Here, however, we're interested in how it affects the likelihood of an individual being older than 40 years old. Given that the coefficient is negative, it implies that individuals with a BMI over 35 are less likely to be older than 40 years old.
-
 
 Now we will find the probability an individual is over 40 years old if their BMI is greater than 35 (Obesity type 2)
 
