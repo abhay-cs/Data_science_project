@@ -49,7 +49,7 @@ After viewing the correlation Matrix and computing BMI as the Gold standard, out
 
 Since BMi is calculated using weight/Height^2 and Obesity level is calculated based on BMI, we first needed to clean the data to build an appropriate model by removing these variables.
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, include = FALSE}
 #clean data for linear model
 BMI_data <- select(data, -Weight, -Height, -Obesity_Level)
 set.seed(99)
@@ -69,6 +69,39 @@ print("RMSE:")
 Metrics::rmse(test$BMI, predict_BMI)
 
 ```
+ t value Pr(>|t|)    
+(Intercept)                               0.548 0.583823    
+GenderMale                               -2.467 0.013753 *  
+Age                                       9.368  < 2e-16 ***
+Family_History_w_Overweightyes           15.334  < 2e-16 ***
+HiCal_Food_Consumpyes                     4.598 4.65e-06 ***
+Veggie_Consump                            9.782  < 2e-16 ***
+Main_Meal_Consump                         2.314 0.020827 *  
+Food_bw_MealsFrequently                  -3.841 0.000128 ***
+Food_bw_Mealsno                           1.382 0.167153    
+Food_bw_MealsSometimes                    3.167 0.001575 ** 
+Does_Smokeyes                            -0.389 0.697589    
+Water_Consump                             2.181 0.029369 *  
+Monitor_Caloriesyes                      -3.153 0.001649 ** 
+Physical_Activ_Amt                       -3.499 0.000481 ***
+Tech_Time                                -2.339 0.019463 *  
+Alcohol_ConsumpFrequently                -0.570 0.568873    
+Alcohol_Consumpno                        -0.864 0.387992    
+Alcohol_ConsumpSometimes                 -0.424 0.671707    
+Transportation_UseBike                   -0.204 0.838328    
+Transportation_UseMotorbike               3.096 0.002003 ** 
+Transportation_UsePublic_Transportation  10.751  < 2e-16 ***
+Transportation_UseWalking                 2.305 0.021329 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 5.705 on 1385 degrees of freedom
+Multiple R-squared:  0.5017,	Adjusted R-squared:  0.4941 
+F-statistic: 66.39 on 21 and 1385 DF,  p-value: < 2.2e-16
+
+[1] "RMSE:"
+[1] 5.729089
+
 
 From the summary of our model, we noted that our R^2 is .49 which means only half the variability of BMI was captured by this data. This is normal for a dataset of this nature which deals with predicting humans. This low value is also justified because our data is missing major predictors of obesity like calorie intake.
 
