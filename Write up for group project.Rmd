@@ -484,3 +484,7 @@ Finally, the age range in out dataset wasn't large or diverse enough to display 
 ```
 
 # References
+
+1. Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). R for Data Science: Import, Tidy, transform, visualize, and model data. O’Reilly. 
+2. Non verbal tourists. UCI Machine Learning Repository. (n.d.). https://archive.ics.uci.edu/dataset/853/non+verbal+tourists+data 
+3. R studio help()
