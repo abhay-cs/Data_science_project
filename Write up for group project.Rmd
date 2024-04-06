@@ -407,6 +407,7 @@ data %>% ggplot(aes(x=BMI, fill=Family_History_w_Overweight)) + geom_histogram()
 # Conclusions
 
 While we were able to construct a good scoring system to rank the variables effect of BMI and overall health we also understand that the models we used were not fully accurate and thus our scoring systems contain flaws
+
 First off, our BMI model was only at best 50% accurate as an individuals BMI involves much more variables and predictors than we had access to. In fact, the biggest predictor of weight, which is a key component in BMI, is calories consumed - burned, data we don't have access to.
 
 Finally, the age range in out dataset wasn't large or diverse enough to display the impacts of BMI and the other habits on an individuals life expectancy. That being said, we understand that our Health rating score may include some inaccuracy as well.
